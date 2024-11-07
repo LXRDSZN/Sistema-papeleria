@@ -39,7 +39,7 @@ const router = createRouter({
       component : () => import('../views/BajasView.vue')
     },
     {
-      path :  '/Conslta',
+      path :  '/Consulta',
       name : 'Consulta',
       component : () => import('../views/BusquedaView.vue')
     }

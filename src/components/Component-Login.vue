@@ -16,27 +16,44 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+// Importamos ref para crear las variables reactivas
+import { ref } from 'vue'; 
+ // Importamos Axios para hacer la solicitud HTTP 
+import axios from 'axios'; 
 
-const router = useRouter();
+// Variables reactivas para almacenar el usuario, la contraseña y el mensaje de error
 const username = ref('');
 const password = ref('');
 const errorMessage = ref('');
 
-const login = () => {
-  // Aquí puedes añadir la lógica de validación para el login
-  if (username.value === '' || password.value === '') {
-    errorMessage.value = 'Por favor, complete todos los campos.';
+// Función de login
+const login = async () => {
+  // Validamos si los campos no están vacíos
+  if (!username.value || !password.value) {
+    errorMessage.value = 'Por favor, ingresa ambos campos';
     return;
   }
 
-  // Lógica de autenticación simulada
-  if (username.value === 'hola' && password.value === 'hola') {
-    // Redirigir al panel
-    router.replace('/Panel'); // Usar replace para evitar que el usuario vuelva al login
-  } else {
-    errorMessage.value = 'Credenciales incorrectas.';
+  try {
+    // Realizamos la solicitud POST para el login
+    const response = await axios.post('http://localhost:5000/api/auth/login', {
+      usuario: username.value,
+      contrasena: password.value,
+    });
+
+    // Si la respuesta es exitosa, guardamos el token en el almacenamiento local
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      // Redirigimos al panel de usuario o al dashboard
+      window.location.href = '/panel'; 
+    }
+  } catch (error) {
+    // Manejamos los errores en caso de credenciales incorrectas
+    if (error.response && error.response.data) {
+      errorMessage.value = error.response.data.message || 'Error al iniciar sesión';
+    } else {
+      errorMessage.value = 'Hubo un problema con la conexión';
+    }
   }
 };
 </script>
@@ -96,6 +113,8 @@ input:focus {
 .error {
   color: red;
   margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 /* Aumentar el tamaño de los campos para pantallas que no sean celulares */

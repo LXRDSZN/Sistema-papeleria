@@ -1,36 +1,104 @@
-<script setup>
-import { RouterLink, RouterView, useRoute } from 'vue-router'
-const route = useRoute();
-</script>
-
 <template>
-    <nav class="navbar">
-        <h1>El Angel - Panel</h1>
-        <ul>
-            <li><RouterLink to="/panel">Panel de control</RouterLink></li>
-            <li><RouterLink to="/Alta Producto">Alta de productos</RouterLink></li>
-            <li><RouterLink to="/Baja Producto">Baja de productos</RouterLink></li>
-            <li><RouterLink to="/Conslta">Buscar productos</RouterLink></li>
-        </ul>
-    </nav>
-    <RouterView />
+    <div class="container">
+        <!-- Barra de navegación -->
+        <nav class="navbar">
+            <h1>El Ángel - Panel</h1>
+            <div class="divider"></div>
+
+            <!-- Menú hamburguesa para pantallas pequeñas -->
+            <button class="hamburger" @click="toggleSidebar">☰</button>
+
+            <ul v-show="!isSidebarCollapsed">
+                <li>
+                    <RouterLink to="/panel">
+                        <span class="material-icons">home</span> Panel de control
+                    </RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/Alta Producto">
+                        <span class="material-icons">add_circle</span> Alta de productos
+                    </RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/Baja Producto">
+                        <span class="material-icons">remove_circle</span> Baja de productos
+                    </RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/Consulta">
+                        <span class="material-icons">search</span> Buscar productos
+                    </RouterLink>
+                </li>
+            </ul>
+
+            <!-- Opciones adicionales de Soporte y Salir -->
+            <ul class="additional-options">
+                <li>
+                    <RouterLink to="/soporte">
+                        <span class="material-icons">headset_mic</span> Soporte
+                    </RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/logout">
+                        <span class="material-icons">logout</span> Salir
+                    </RouterLink>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <RouterView />
+        </main>
+    </div>
 </template>
 
+<script setup>
+import { ref } from 'vue';
+
+const isSidebarCollapsed = ref(false);
+
+function toggleSidebar() {
+  isSidebarCollapsed.value = !isSidebarCollapsed.value;
+}
+</script>
 
 <style scoped>
-.navbar {
-    background-color: #2d3e50;
-    color: #fff;
-    padding: 1rem;
-    width: 250px; 
-    height: 100vh; 
-    position: fixed; 
-    top: 0;
-    left: 0; 
+/* Contenedor principal que abarca toda la estructura */
+.container {
+    display: flex;
+    flex-direction: row;
 }
 
+/* Barra de navegación fija */
+.navbar {
+    background-color: #034d9d;
+    color: #fff;
+    width: 250px;
+    height: 100vh;
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 10;
+    transition: width 0.3s;
+}
+
+/* Estilos del título y barra de separación */
 h1 {
-    margin-bottom: 1rem; 
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+/* Línea divisoria debajo del título */
+.divider {
+    height: 2px;
+    background-color: #fff;
+    margin-bottom: 1rem;
 }
 
 ul {
@@ -39,18 +107,84 @@ ul {
     margin: 0;
 }
 
+ul.additional-options {
+    margin-top: auto;
+}
+
 li {
-    margin: 0.5rem 0; 
+    margin: 0.5rem 0;
 }
 
 a {
     color: #fff;
     text-decoration: none;
-    display: block; 
+    display: flex;
+    align-items: center;
     padding: 0.5rem;
 }
 
+a .material-icons {
+    margin-right: 0.5rem;
+}
+
 a:hover {
-    background-color: rgba(255, 255, 255, 0.1); 
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Contenido principal con margen para no superponerse con la barra de navegación */
+.main-content {
+    margin-left: 250px; /* Debe coincidir con el ancho de la barra de navegación */
+    padding: 1rem;
+    width: calc(100% - 250px); /* Ajusta el ancho para el espacio disponible */
+    transition: margin-left 0.3s;
+}
+
+/* Estilos para el menú hamburguesa en pantallas pequeñas */
+.hamburger {
+    display: none;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 1rem;
+    text-align: left;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    /* Barra lateral se colapsa en pantallas pequeñas */
+    .navbar {
+        width: 80px;
+    }
+
+    .main-content {
+        margin-left: 80px;
+    }
+
+    /* Estilo para el menú hamburguesa */
+    .hamburger {
+        display: block;
+    }
+
+    /* Ocultar el menú de navegación en pantallas pequeñas, que se abre con el hamburguesa */
+    ul {
+        display: none;
+        flex-direction: column;
+    }
+
+    ul.additional-options {
+        display: none;
+    }
+
+    ul.v-show {
+        display: flex;
+    }
+
+    .navbar ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }
 </style>
