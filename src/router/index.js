@@ -42,6 +42,10 @@ const router = createRouter({
       path :  '/Consulta',
       name : 'Consulta',
       component : () => import('../views/BusquedaView.vue')
+    },{
+      path : '/Ventas',
+      name : 'ventas',
+      component : () => import('../views/RegistroVenta.vue')
     }
 
   ]

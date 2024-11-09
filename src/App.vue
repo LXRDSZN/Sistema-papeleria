@@ -8,8 +8,9 @@ const route = useRoute();
 const isPanelView = () => {
   return route.name === 'Panel del sistema' || 
          route.name === 'Alta Producto' || 
-         route.name === 'Baja Producto' || 
-         route.name === 'Consulta'; // Asegúrate de que los nombres de las rutas coincidan
+         route.name === 'Baja Producto' ||
+         route.name === 'ventas'|| 
+         route.name === 'Consulta'; // Asegúrate de que los nombres de las rutas coinci
 };
 </script>
 
@@ -21,7 +22,7 @@ const isPanelView = () => {
       <nav>
         <RouterLink to="/">Login</RouterLink>
         <RouterLink to="/Registrar">Sign In</RouterLink>
-        <RouterLink to="/Panel">Panel del sistema</RouterLink>
+       <!--<RouterLink to="/Panel">Panel del sistema</RouterLink>-->
       </nav>
     </div>
   </header>

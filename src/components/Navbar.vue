@@ -15,6 +15,12 @@
                     </RouterLink>
                 </li>
                 <li>
+                    <RouterLink to="/Registrar"><span class="material-icons">person_add</span>Agregar Usuario</RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/Baja"><span class="material-icons">person_remove</span>Bajar Usuario</RouterLink>
+                </li>
+                <li>
                     <RouterLink to="/Alta Producto">
                         <span class="material-icons">add_circle</span> Alta de productos
                     </RouterLink>
@@ -28,6 +34,11 @@
                     <RouterLink to="/Consulta">
                         <span class="material-icons">search</span> Buscar productos
                     </RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/Ventas">
+                       <span class="material-icons">app_registration</span>Registro de Ventas
+                    </RouterLink> 
                 </li>
             </ul>
 
