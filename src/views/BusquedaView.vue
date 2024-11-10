@@ -10,6 +10,7 @@ import Navbar from '@/components/Navbar.vue';
   </template>
   
   <style>
+
   @media (min-width: 1024px) {
     .about {
       min-height: 100vh;
