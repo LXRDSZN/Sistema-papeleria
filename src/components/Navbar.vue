@@ -18,7 +18,7 @@
                     <RouterLink to="/Registrar"><span class="material-icons">person_add</span>Agregar Usuario</RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/Baja"><span class="material-icons">person_remove</span>Bajar Usuario</RouterLink>
+                    <RouterLink to="/Baja Usuario"><span class="material-icons">person_remove</span>Bajar Usuario</RouterLink>
                 </li>
                 <li>
                     <RouterLink to="/Alta Producto">
@@ -42,7 +42,7 @@
                 </li>
             </ul>
 
-            <!-- Opciones adicionales de Soporte y Salir -->
+            <!-- Opciones  de Soporte y Salir -->
             <ul class="additional-options">
                 <li>
                     <RouterLink to="/soporte">
@@ -50,7 +50,7 @@
                     </RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/logout">
+                    <RouterLink to="/">
                         <span class="material-icons">logout</span> Salir
                     </RouterLink>
                 </li>
@@ -144,9 +144,8 @@ a:hover {
 
 /* Contenido principal con margen para no superponerse con la barra de navegación */
 .main-content {
-    margin-left: 250px; /* Debe coincidir con el ancho de la barra de navegación */
-    padding: 1rem;
-    width: calc(100% - 250px); /* Ajusta el ancho para el espacio disponible */
+    margin-left: 250px; 
+    width: calc(100% - 250px); 
     transition: margin-left 0.3s;
 }
 

@@ -4,9 +4,9 @@ import Navbar from '@/components/Navbar.vue';
 import ComponentSignIn from '@/components/Component-SignIn.vue';
 </script>
 <template>
-    <div class="sign-in">
-     <ComponentSignIn/>
-     <Navbar/>
+    <div class="Drop user">
+    <h1>baja Usuario</h1>
+    <Navbar/>
     </div>
   </template>
   

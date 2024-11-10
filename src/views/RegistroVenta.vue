@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar.vue';
 
 <template>
     <div class="Registro-venta">
-        <h1>hello esto es para dar altas</h1>
+        <h1>hello esto es para ver  las ventas</h1>
         <Navbar/>
     </div>
   </template>
