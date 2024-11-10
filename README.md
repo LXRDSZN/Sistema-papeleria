@@ -12,13 +12,23 @@
 
 - `public/`: Contiene archivos públicos y `index.html`.
 - `src/`: Carpeta principal del código fuente, donde se encuentran los componentes Vue.
-- `images/`: Almacena imágenes de referencia del sistema. Actualmente, esta carpeta incluye las siguientes capturas de pantalla:
-  - `2024-11-09-23:44:14-screenshot.png`
-  - `2024-11-09-23:45:06-screenshot.png`
-  - `2024-11-09-23:44:31-screenshot.png`
-  - `2024-11-09-23:45:16-screenshot.png`
+- `images/`: Almacena imágenes de referencia del sistema, como se muestra a continuación.
 - `node_modules/`: Módulos de dependencias instaladas mediante npm.
 - `vite.config.js`: Archivo de configuración de Vite para personalizar el proceso de compilación.
+
+## Capturas de Pantalla
+
+Aquí puedes ver algunas capturas de pantalla del sistema que se encuentran en la carpeta `images`:
+
+### Ejemplo de Interfaz
+![Screenshot 1](./images/2024-11-09-23:44:14-screenshot.png)
+
+![Screenshot 2](./images/2024-11-09-23:44:31-screenshot.png)
+
+### Más Detalles del Sistema
+![Screenshot 3](./images/2024-11-09-23:45:06-screenshot.png)
+
+![Screenshot 4](./images/2024-11-09-23:45:16-screenshot.png)
 
 ## Configuración Recomendada de IDE
 
