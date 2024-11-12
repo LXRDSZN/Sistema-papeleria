@@ -1,21 +1,11 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue';
+import ComponentAltasProducto from '@/components/Component-Altas-producto.vue';
 </script>
 <template>
     <div class="Altas">
-        <h1>hello esto es para dar altas</h1>
         <Navbar/>
+        <ComponentAltasProducto/>
     </div>
   </template>
-  
-  <style>
-
-  @media (min-width: 1024px) {
-    .about {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-    }
-  }
-  </style>
   

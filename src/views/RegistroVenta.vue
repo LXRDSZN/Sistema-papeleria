@@ -1,11 +1,13 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue';
+import ComponetRegistroVenta from '@/components/Componet-Registro-venta.vue';
 </script>
 
 <template>
     <div class="Registro-venta">
-        <h1>hello esto es para ver  las ventas</h1>
+        
         <Navbar/>
+        <ComponetRegistroVenta/>
     </div>
   </template>
   

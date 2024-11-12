@@ -9,50 +9,97 @@ const correo = ref('');
 const telefono = ref('');
 const username = ref('');
 const password = ref('');
+const calle = ref('');
+const numero_exterior = ref('');
+const numero_interior = ref('');
+const colonia = ref('');
+const ciudad = ref('');
+const estado = ref('');
+const codigo_postal = ref('');
 </script>
 
 <template>
   <div class="register-container">
-    <section class="field">
-      <label for="curp">CURP:</label>
-      <input type="text" id="curp" v-model="curp" placeholder="Ingrese su CURP" />
-    </section>
+    <section class="fields-container">
+      <div class="field">
+        <label for="curp">CURP:</label>
+        <input type="text" id="curp" v-model="curp" placeholder="Ingrese su CURP" />
+      </div>
 
-    <section class="field">
-      <label for="apellido_paterno">Apellido Paterno:</label>
-      <input type="text" id="apellido_paterno" v-model="apellido_paterno" placeholder="Ingrese su Apellido Paterno" />
-    </section>
+      <div class="field">
+        <label for="apellido_paterno">Apellido Paterno:</label>
+        <input type="text" id="apellido_paterno" v-model="apellido_paterno" placeholder="Ingrese su Apellido Paterno" />
+      </div>
 
-    <section class="field">
-      <label for="apellido_materno">Apellido Materno:</label>
-      <input type="text" id="apellido_materno" v-model="apellido_materno" placeholder="Ingrese su Apellido Materno" />
-    </section>
+      <div class="field">
+        <label for="apellido_materno">Apellido Materno:</label>
+        <input type="text" id="apellido_materno" v-model="apellido_materno" placeholder="Ingrese su Apellido Materno" />
+      </div>
 
-    <section class="field">
-      <label for="nombre">Nombre:</label>
-      <input type="text" id="nombre" v-model="nombre" placeholder="Ingrese su Nombre" />
-    </section>
+      <div class="field">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" v-model="nombre" placeholder="Ingrese su Nombre" />
+      </div>
 
-    <section class="field">
-      <label for="correo">Correo:</label>
-      <input type="email" id="correo" v-model="correo" placeholder="Ingrese su Correo" />
-    </section>
+      <div class="field">
+        <label for="correo">Correo:</label>
+        <input type="email" id="correo" v-model="correo" placeholder="Ingrese su Correo" />
+      </div>
 
-    <section class="field">
-      <label for="telefono">Teléfono:</label>
-      <input type="tel" id="telefono" v-model="telefono" placeholder="Ingrese su Teléfono" />
-    </section>
+      <div class="field">
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" v-model="telefono" placeholder="Ingrese su Teléfono" />
+      </div>
 
-    <section class="field">
-      <label for="username">Usuario:</label>
-      <input type="text" id="username" v-model="username" placeholder="Ingrese su Usuario" />
-    </section>
+      <div class="field">
+        <label for="username">Usuario:</label>
+        <input type="text" id="username" v-model="username" placeholder="Ingrese su Usuario" />
+      </div>
 
-    <section class="field">
-      <label for="password">Contraseña:</label>
-      <input type="password" id="password" v-model="password" placeholder="Ingrese su Contraseña" />
-    </section>
+      <div class="field">
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" v-model="password" placeholder="Ingrese su Contraseña" />
+      </div>
 
+      <div class="field">
+        <label for="calle">Calle:</label>
+        <input type="text" id="calle" v-model="calle" placeholder="Ingrese su Calle" />
+      </div>
+
+      <div class="field">
+        <label for="numero_exterior">Número Exterior:</label>
+        <input type="text" id="numero_exterior" v-model="numero_exterior" placeholder="Número Exterior" />
+      </div>
+
+      <div class="field">
+        <label for="numero_interior">Número Interior:</label>
+        <input type="text" id="numero_interior" v-model="numero_interior" placeholder="Número Interior" />
+      </div>
+
+      <div class="field">
+        <label for="colonia">Colonia:</label>
+        <input type="text" id="colonia" v-model="colonia" placeholder="Ingrese su Colonia" />
+      </div>
+
+      <div class="field">
+        <label for="ciudad">Ciudad:</label>
+        <input type="text" id="ciudad" v-model="ciudad" placeholder="Ingrese su Ciudad" />
+      </div>
+
+      <div class="field">
+        <label for="estado">Estado:</label>
+        <input type="text" id="estado" v-model="estado" placeholder="Ingrese su Estado" />
+      </div>
+
+      <div class="field">
+        <label for="codigo_postal">Código Postal:</label>
+        <input type="text" id="codigo_postal" v-model="codigo_postal" placeholder="Ingrese su Código Postal" />
+      </div>
+      <div class="field">
+        <label for="rol">Rol:</label>
+        <input type="text" id="rol" v-model="rol" placeholder="Ingrese el Rol" />
+      </div>
+    </section>
     <button class="register-button">Registrar</button>
   </div>
 </template>
@@ -61,27 +108,31 @@ const password = ref('');
 .register-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   padding: 2rem;
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
-.field {
+.fields-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
   width: 100%;
-  margin-bottom: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
 }
 
 label {
-  display: block;
   margin-bottom: 0.5rem;
   font-weight: bold;
   color: rgb(93, 95, 93);
 }
 
 input {
-  width: 100%;
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 0.25rem;
@@ -102,6 +153,7 @@ input:focus {
   border-radius: 0.25rem;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-top: 1rem;
 }
 
 .register-button:hover {

@@ -8,10 +8,10 @@ defineProps({
 </script>
 
 <template>
-  <div class="sys-panel-venta">
-    <div class="panel-venta ">
+  <div class="sys-Alta-producto">
+    <div class="panel-Alta ">
         <h3>
-            Registro de ventas 
+            Altas de productos
         </h3>
     </div>
   
@@ -21,7 +21,7 @@ defineProps({
 
 <style scoped>
 /* Contenedor principal del panel, para que ocupe toda la pantalla */
-.sys-panel-venta {
+.sys-Alta-producto {
   position: fixed;
   top: 0;
   left: 0;
@@ -33,13 +33,12 @@ defineProps({
 }
 
 /* Panel de contenido */
-.panel-venta {
+.panel-Alta {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   padding: 2rem;
   max-height: 100%; 
 }
-
 
 </style>
