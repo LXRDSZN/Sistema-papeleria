@@ -1,5 +1,8 @@
 <script setup>
+// Importamos ref para crear las variables reactivas
 import { ref } from 'vue';
+// Importamos Axios para hacer la solicitud HTTP
+import axios from 'axios';
 
 const curp = ref('');
 const apellido_paterno = ref('');
@@ -15,7 +18,76 @@ const numero_interior = ref('');
 const colonia = ref('');
 const ciudad = ref('');
 const estado = ref('');
+const pais = ref('');
 const codigo_postal = ref('');
+const rol = ref('');
+const errorMessage = ref('');
+
+// Función para registrar un usuario
+const registerUser = async () => {
+  // Validamos si los campos requeridos no están vacíos
+  if (!curp.value || !apellido_paterno.value || !apellido_materno.value || !nombre.value || !correo.value || 
+      !telefono.value || !username.value || !password.value || !calle.value || !numero_exterior.value || 
+      !colonia.value || !ciudad.value || !estado.value || !codigo_postal.value || !rol.value) {
+    errorMessage.value = 'Por favor, completa todos los campos';
+    return;
+  }
+
+  // Log para revisar los datos antes de enviarlos
+  console.log({
+    curp: curp.value,
+    apellido_paterno: apellido_paterno.value,
+    apellido_materno: apellido_materno.value,
+    nombre: nombre.value,
+    correo: correo.value,
+    telefono: telefono.value,
+    usuario: username.value,
+    contrasena: password.value,
+    calle: calle.value,
+    numero_exterior: numero_exterior.value,
+    numero_interior: numero_interior.value,
+    colonia: colonia.value,
+    ciudad: ciudad.value,
+    estado: estado.value,
+    pais: pais.value,
+    codigo_postal: codigo_postal.value,
+    rol_id: rol.value
+  });
+
+  try {
+    // Realizamos la solicitud POST para registrar el usuario
+    const response = await axios.post('http://localhost:5000/api/auth/Registrar', {
+      curp: curp.value,               // Asegúrate de enviar la curp
+      apellido_paterno: apellido_paterno.value,
+      apellido_materno: apellido_materno.value,
+      nombre: nombre.value,
+      correo: correo.value,
+      telefono: telefono.value,
+      usuario: username.value,
+      contrasena: password.value,
+      calle: calle.value,
+      numero_exterior: numero_exterior.value,
+      numero_interior: numero_interior.value,
+      colonia: colonia.value,
+      ciudad: ciudad.value,
+      estado: estado.value,
+      pais: pais.value,
+      codigo_postal: codigo_postal.value,
+      rol_id: rol.value,
+    });
+
+    // Si el registro es exitoso, redirige o limpia el formulario
+    if (response.data.success) {
+      alert('Registro exitoso');
+      window.location.href = '/panel';
+    } else {
+      errorMessage.value = 'Error en el registro. Intente nuevamente.';
+    }
+  } catch (error) {
+    console.error('Error al registrar:', error); // Muestra el error real en la consola
+    errorMessage.value = 'Error al registrar. Intente nuevamente.';
+  }
+};
 </script>
 
 <template>
@@ -92,15 +164,23 @@ const codigo_postal = ref('');
       </div>
 
       <div class="field">
+        <label for="pais">País:</label>
+        <input type="text" id="pais" v-model="pais" placeholder="Ingrese su País" />
+      </div>
+
+      <div class="field">
         <label for="codigo_postal">Código Postal:</label>
         <input type="text" id="codigo_postal" v-model="codigo_postal" placeholder="Ingrese su Código Postal" />
       </div>
+
       <div class="field">
         <label for="rol">Rol:</label>
         <input type="text" id="rol" v-model="rol" placeholder="Ingrese el Rol" />
       </div>
     </section>
-    <button class="register-button">Registrar</button>
+
+    <button class="register-button" @click="registerUser">Registrar</button>
+    <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
   </div>
 </template>
 

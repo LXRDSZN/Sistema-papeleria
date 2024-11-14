@@ -58,5 +58,6 @@ const recentlyAddedProducts = [
 .tables {
     display: flex;
     gap: 1rem;
+    color: #888;
 }
 </style>

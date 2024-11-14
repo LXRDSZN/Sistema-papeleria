@@ -11,7 +11,7 @@ defineProps({
   <div class="sys-panel-venta">
     <div class="panel-venta ">
         <h3>
-            Registro de ventas 
+            Registro de ventas  
         </h3>
     </div>
   

@@ -24,6 +24,7 @@ const props = defineProps({
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 1rem;
+    color: #000000;
 }
 ul {
     list-style-type: none;
@@ -38,6 +39,6 @@ li {
 }
 .category {
     font-style: italic;
-    color: #888;
+    color: #000000;
 }
 </style>

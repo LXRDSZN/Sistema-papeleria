@@ -60,6 +60,7 @@ const recentlyAddedProducts = [
 /* Panel de contenido */
 .panel {
   display: flex;
+  color: #000000;
   flex-direction: column;
   gap: 2rem;
   padding: 2rem;

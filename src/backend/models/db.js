@@ -9,18 +9,24 @@ const client = new Client({
   port: 5432,                  // Puerto de PostgreSQL
 });
 
-// Conecxion a la base de datos
+// Conexion a la base de datos
 const connectDb = async () => {
   try {
     await client.connect();  
     console.log('Conexión a la base de datos PostgreSQL establecida');
 
-    // Realiza una consulta simple para verificar la conexión
-    const res = await client.query('SELECT NOW()');
-    console.log('Hora actual en la base de datos:', res.rows[0].now);
+    // Realizar consulta para ver si hay registros en la tabla usuarios
+    const query = 'SELECT * FROM usuarios;';
+    const res = await client.query(query);
+
+    if (res.rows.length > 0) {
+      console.log('Existen registros en la tabla usuarios');
+    } else {
+      console.log('No hay registros en la tabla usuarios');
+    }
 
   } catch (err) {
-    console.error('Error de conexión a la base de datos:', err);
+    console.error('Error de conexión a la base de datos o al realizar la consulta:', err);
     process.exit(1);
   }
 };
