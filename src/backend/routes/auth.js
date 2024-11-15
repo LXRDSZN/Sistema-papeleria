@@ -27,7 +27,7 @@ router.post('/auth/registrar', async (req, res) => {
   const { curp, apellido_paterno, apellido_materno, nombre, correo, telefono, usuario, contrasena, rol_id } = req.body;
 
   try {
-    // Llamamos al modelo de usuario para registrar los datos sin encriptar la contraseña
+    // Llamamos al modelo de usuario para registrar los datos
     const newUser = await registerUser(curp, apellido_paterno, apellido_materno, nombre, correo, telefono, usuario, contrasena, rol_id);
 
     if (newUser) {
@@ -42,8 +42,8 @@ router.post('/auth/registrar', async (req, res) => {
 });
 
 
-router.post('/auth/registrar-addres', async (req, res) => {
-  const { curp, calle, numero_exterior, numero_interior, colonia, ciudad, estado, codigo_postal, pais } = req.body;
+router.post('/auth/registrar-direccion', async (req, res) => {
+  const { curp, calle, numero_exterior, numero_interior, colonia, ciudad, estado, pais, codigo_postal } = req.body;
 
   console.log('Datos recibidos:', req.body);  // Verifica que los datos son los correctos
 

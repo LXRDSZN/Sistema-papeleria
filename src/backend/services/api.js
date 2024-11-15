@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Crear instancia de Axios con la configuración basica
 const api = axios.create({
-  baseURL: 'http://localhost:5173/api', //url del backend
+  baseURL: 'http://localhost:5000/api', //url del backend
   headers: {
     'Content-Type': 'application/json',
   },
@@ -26,6 +26,7 @@ export const login = async (usuario, contrasena) => {
 };
 
 
+
 // Función para registrar un nuevo usuario
 export const register = async (curp, apellido_paterno, apellido_materno, nombre, correo, telefono, usuario, contrasena, rol_id) => {
   try {
@@ -40,6 +41,7 @@ export const register = async (curp, apellido_paterno, apellido_materno, nombre,
       contrasena,
       rol_id
     });
+
     // Devuelve la respuesta de la API, que puede incluir un mensaje de éxito
     return response.data;
   } catch (error) {
@@ -49,10 +51,11 @@ export const register = async (curp, apellido_paterno, apellido_materno, nombre,
   }
 };
 
-export const registerAddress3 = async (curp, calle, numero_exterior, numero_interior, colonia, ciudad, estado, codigo_postal, pais) => {
+
+export const registerAddress3 = async (curp, calle, numero_exterior, numero_interior, colonia, ciudad, estado,codigo_postal, pais) => {
   try {
     console.log('Enviando solicitud para registrar dirección con curp:', curp);
-    const response = await api.post('/auth/registrar-addres', { 
+    const response = await api.post('/auth/registrar-direccion', { 
       curp,
       calle,
       numero_exterior,
@@ -62,6 +65,7 @@ export const registerAddress3 = async (curp, calle, numero_exterior, numero_inte
       estado,
       codigo_postal,
       pais,
+      
     });
     console.log('Respuesta del registro de dirección:', response.data);
     return response.data;

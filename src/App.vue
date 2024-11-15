@@ -12,9 +12,10 @@ const isPanelView = () => {
          route.name === 'ventas'            ||
          route.name === 'sign-in'           ||
          route.name === 'Baja Usuario'      ||
-         route.name ==  'Datos de usuario'           ||
-         route.name ==  'Datos de direccion'        ||
-         route.name === 'Consulta'; // Asegúrate de que los nombres de las rutas coinci
+         route.name ==  'Datos de usuario'  ||
+         route.name ==  'Datos de direccion'||
+         route.name === 'Soporte'           ||
+         route.name === 'Consulta'; // name del path
 };
 </script>
 

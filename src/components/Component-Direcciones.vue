@@ -1,10 +1,66 @@
 <script setup>
-defineProps({
-  msg: {
-    type: String,
-    required: true
+import { ref } from 'vue';
+import axios from 'axios';
+
+// Variables reactivas para los campos del formulario
+const calle = ref('');
+const numero_exterior = ref('');
+const numero_interior = ref('');
+const colonia = ref('');
+const ciudad = ref('');
+const estado = ref('');
+const codigo_postal  = ref('');
+const pais = ref('');
+
+// Variable para el mensaje de error
+const errorMessage = ref('');
+
+// Función para registrar la dirección
+const registerAddress3 = async () => {
+  // Validamos si los campos están vacíos
+  if (!calle.value || !numero_exterior.value || !numero_interior.value || !colonia.value || !ciudad.value || !estado.value || !codigo_postal.value || !pais.value) {
+    errorMessage.value = 'Por favor, completa todos los campos de la dirección';
+    return;
   }
-})
+
+  // Log de los datos a enviar
+  console.log({
+    calle: calle.value,
+    numero_exterior: numero_exterior.value,
+    numero_interior: numero_interior.value,
+    colonia: colonia.value,
+    ciudad: ciudad.value,
+    estado: estado.value,
+    codigo_postal: codigo_postal.value,
+    pais: pais.value,
+  });
+
+  try {
+    // Realizamos la solicitud POST para registrar la dirección
+    const response = await axios.post('http://localhost:5000/api/auth/registrar-direccion', {
+      calle: calle.value,
+      numero_exterior: numero_exterior.value,
+      numero_interior: numero_interior.value,
+      colonia: colonia.value,
+      ciudad: ciudad.value,
+      estado: estado.value,
+      codigo_postal: codigo_postal.value,
+      pais: pais.value,
+    });
+
+    // Si el registro es exitoso, redirigir a otra página o limpiar los campos
+    if (response.data.success) {
+      alert('Dirección registrada exitosamente');
+      // Redirigir al panel o limpiar el formulario
+      window.location.href = '/panel';  // Usar el router de Vue sería lo más recomendable
+    } else {
+      errorMessage.value = 'Error al registrar la dirección. Intente nuevamente.';
+    }
+  } catch (error) {
+    console.error('Error al registrar la dirección:', error);
+    errorMessage.value = 'Error al registrar la dirección. Intente nuevamente.';
+  }
+};
 </script>
 <template>
   <div class="sys-panel-direcciones">
@@ -55,7 +111,7 @@ defineProps({
         </div>
       </section>
   
-      <button class="register-button" @click="registerCompleteUser">Registrar</button>
+      <button class="register-button" @click="registerAddress3">Registrar</button>
       <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
     </div>
   </div>

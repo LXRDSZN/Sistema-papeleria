@@ -62,7 +62,13 @@ const router = createRouter({
       path : '/Datos de direccion',
       name :  'Datos de direccion',
       component : () => import('../views/DireccionAltaView.vue')
+    },
+    {
+      path : '/Soporte',
+      name : 'Soporte',
+      component : () => import('../views/soporteView.vue')
     }
+  
 
   ]
 })
