@@ -1,43 +1,44 @@
 <script setup>
-import { ref } from 'vue';
+// Importamos ref para crear las variables reactivas
+import { ref, onMounted } from 'vue';
+// Importamos Axios para hacer la solicitud HTTP
 import axios from 'axios';
+// Importamos useRoute para acceder a los parámetros de la URL
+import { useRoute, useRouter } from 'vue-router';
 
-// Variables reactivas para los campos del formulario
+// Variables reactivas para los campos del formulario de dirección
+const curp = ref('');
 const calle = ref('');
 const numero_exterior = ref('');
 const numero_interior = ref('');
 const colonia = ref('');
 const ciudad = ref('');
 const estado = ref('');
-const codigo_postal  = ref('');
+const codigo_postal = ref('');
 const pais = ref('');
 
 // Variable para el mensaje de error
 const errorMessage = ref('');
+const router = useRouter();  // Crear una instancia del router
+const route = useRoute(); // Acceder a los parámetros de la URL
+
+// Obtener la CURP desde los query parameters de la URL al montar el componente
+onMounted(() => {
+  curp.value = route.query.curp;  // Acceder a la CURP desde la URL
+});
 
 // Función para registrar la dirección
 const registerAddress3 = async () => {
   // Validamos si los campos están vacíos
-  if (!calle.value || !numero_exterior.value || !numero_interior.value || !colonia.value || !ciudad.value || !estado.value || !codigo_postal.value || !pais.value) {
+  if (!calle.value || !numero_exterior.value || !numero_interior.value || !colonia.value || !ciudad.value || !estado.value || !codigo_postal.value || !pais.value || !curp.value) {
     errorMessage.value = 'Por favor, completa todos los campos de la dirección';
     return;
   }
 
-  // Log de los datos a enviar
-  console.log({
-    calle: calle.value,
-    numero_exterior: numero_exterior.value,
-    numero_interior: numero_interior.value,
-    colonia: colonia.value,
-    ciudad: ciudad.value,
-    estado: estado.value,
-    codigo_postal: codigo_postal.value,
-    pais: pais.value,
-  });
-
   try {
     // Realizamos la solicitud POST para registrar la dirección
     const response = await axios.post('http://localhost:5000/api/auth/registrar-direccion', {
+      curp: curp.value,  // Pasar la CURP como llave foránea
       calle: calle.value,
       numero_exterior: numero_exterior.value,
       numero_interior: numero_interior.value,
@@ -49,10 +50,10 @@ const registerAddress3 = async () => {
     });
 
     // Si el registro es exitoso, redirigir a otra página o limpiar los campos
-    if (response.data.success) {
+    if (response.data.message === 'Dirección registrada exitosamente') {
       alert('Dirección registrada exitosamente');
-      // Redirigir al panel o limpiar el formulario
-      window.location.href = '/panel';  // Usar el router de Vue sería lo más recomendable
+      // Redirigir usando Vue Router
+      router.push('/panel');  
     } else {
       errorMessage.value = 'Error al registrar la dirección. Intente nuevamente.';
     }
@@ -62,11 +63,13 @@ const registerAddress3 = async () => {
   }
 };
 </script>
+
+
 <template>
   <div class="sys-panel-direcciones">
     <nav class="registros">
-      <RouterLink to="/Datos_de_usuario">Registar Usuario</RouterLink>
-      <RouterLink to="/Datos_de_direccion">Registrar Direccion</RouterLink>
+      <RouterLink to="/Datos_de_usuario">Registrar Usuario</RouterLink>
+      <RouterLink to="/Datos_de_direccion">Registrar Dirección</RouterLink>
     </nav>
     <div class="register-container">
       <section class="fields-container">  
@@ -115,10 +118,33 @@ const registerAddress3 = async () => {
       <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
     </div>
   </div>
-  </template>
-  
-  <style scoped>
+</template>
 
+  <style scoped>
+  .registros {
+    width: 100%;
+    font-size: 25px;
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .registros a.router-link-exact-active {
+    color: rgb(91, 96, 91);
+  }
+  
+  .registros a.router-link-exact-active:hover {
+    background-color: transparent;
+  }
+  
+  .registros a {
+    display: inline-block;
+    padding: 0 1rem;
+    border-left: 1px solid var(--color-border);
+  }
+  
+  .registros a:first-of-type {
+    border: 0;
+  }
   .sys-panel-direcciones {
     position: fixed;
     top: 10;

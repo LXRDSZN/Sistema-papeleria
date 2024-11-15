@@ -15,30 +15,17 @@ const username = ref('');
 const password = ref('');
 const rol = ref('');
 
-// Variable para el mensaje de error
+// Variables para el mensaje de error y éxito
 const errorMessage = ref('');
 const successMessage = ref('');
 
 // Función para registrar un usuario
 const registerUser = async () => {
-  // Validamos si los campos de los datos de usuarios no estén vacíos
+  // Validamos si los campos de los datos del usuario no están vacíos
   if (!curp.value || !apellido_paterno.value || !apellido_materno.value || !nombre.value || !correo.value || !telefono.value || !username.value || !password.value || !rol.value) {
     errorMessage.value = 'Por favor, completa todos los campos del Usuario';
     return;
   }
-
-  // Log para revisar los datos antes de enviarlos
-  console.log({
-    curp: curp.value,
-    apellido_paterno: apellido_paterno.value,
-    apellido_materno: apellido_materno.value,
-    nombre: nombre.value,
-    correo: correo.value,
-    telefono: telefono.value,
-    usuario: username.value,
-    contrasena: password.value,
-    rol_id: rol.value,
-  });
 
   try {
     // Realizamos la solicitud POST para registrar el usuario
@@ -58,17 +45,18 @@ const registerUser = async () => {
     if (response.data.message === 'Usuario registrado exitosamente') {
       successMessage.value = 'Usuario registrado exitosamente';
       errorMessage.value = '';  // Limpiar mensaje de error si es exitoso
-      // Redirigir o limpiar el formulario, si es necesario
-      window.location.href = '/Datos_de_direccion';
+      // Redirigir a la página de dirección con la CURP como parámetro
+      window.location.href = `/Datos_de_direccion?curp=${curp.value}`;
     } else {
       errorMessage.value = 'Error en el registro de usuario. Intente nuevamente.';
     }
   } catch (error) {
-    console.error('Error al registrar:', error); // Muestra el error real en la consola
+    console.error('Error al registrar:', error);
     errorMessage.value = 'Error al registrar. Intente nuevamente.';
   }
 };
 </script>
+
 
 <template>
   <div class="sys-panel-usuario">
@@ -145,6 +133,32 @@ const registerUser = async () => {
     margin-left: 250px; 
     padding: 1rem;
   }
+
+  .registros {
+    width: 100%;
+    font-size: 25px;
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .registros a.router-link-exact-active {
+    color: rgb(91, 96, 91);
+  }
+  
+  .registros a.router-link-exact-active:hover {
+    background-color: transparent;
+  }
+  
+  .registros a {
+    display: inline-block;
+    padding: 0 1rem;
+    border-left: 1px solid var(--color-border);
+  }
+  
+  .registros a:first-of-type {
+    border: 0;
+  }
+
   .register-container {
     display: flex;
     flex-direction: column;
