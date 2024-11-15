@@ -7,11 +7,13 @@ const route = useRoute();
 // Función para verificar si estamos en una de las vistas del panel
 const isPanelView = () => {
   return route.name === 'Panel del sistema' || 
-         route.name === 'Alta Producto' || 
-         route.name === 'Baja Producto' ||
-         route.name === 'ventas' ||
-         route.name === 'sign-in' ||
-         route.name === 'Baja Usuario' ||
+         route.name === 'Alta Producto'     || 
+         route.name === 'Baja Producto'     ||
+         route.name === 'ventas'            ||
+         route.name === 'sign-in'           ||
+         route.name === 'Baja Usuario'      ||
+         route.name ==  'Datos de usuario'           ||
+         route.name ==  'Datos de direccion'        ||
          route.name === 'Consulta'; // Asegúrate de que los nombres de las rutas coinci
 };
 </script>

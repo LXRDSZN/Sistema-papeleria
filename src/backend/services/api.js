@@ -49,11 +49,10 @@ export const register = async (curp, apellido_paterno, apellido_materno, nombre,
   }
 };
 
-
-export const registerAddress3 = async (curp, calle, numero_exterior, numero_interior, colonia, ciudad, estado,codigo_postal, pais) => {
+export const registerAddress3 = async (curp, calle, numero_exterior, numero_interior, colonia, ciudad, estado, codigo_postal, pais) => {
   try {
     console.log('Enviando solicitud para registrar dirección con curp:', curp);
-    const response = await api.post('/auth/registrar-direccion', { 
+    const response = await api.post('/auth/registrar-addres', { 
       curp,
       calle,
       numero_exterior,
@@ -63,7 +62,6 @@ export const registerAddress3 = async (curp, calle, numero_exterior, numero_inte
       estado,
       codigo_postal,
       pais,
-      
     });
     console.log('Respuesta del registro de dirección:', response.data);
     return response.data;

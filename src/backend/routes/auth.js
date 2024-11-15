@@ -1,7 +1,7 @@
 import express from 'express';
 import { checkUserCredentials } from '../models/user.js'; //modelos de usuario.js
 import { registerUser } from '../models/registrer.js'     //modelos de resistro de usuarios 
-import { registerAddress3 } from '../services/api.js';     //modelos de registro de direcciones 
+import { registerAddress3 } from '../models/addres.js';     //modelos de registro de direcciones 
 import jwt from 'jsonwebtoken';                           // Importamos JWT para crear un token de sesión 
 
 const router = express.Router();
@@ -42,8 +42,8 @@ router.post('/auth/registrar', async (req, res) => {
 });
 
 
-router.post('/auth/registrar-direccion', async (req, res) => {
-  const { curp, calle, numero_exterior, numero_interior, colonia, ciudad, estado, pais, codigo_postal } = req.body;
+router.post('/auth/registrar-addres', async (req, res) => {
+  const { curp, calle, numero_exterior, numero_interior, colonia, ciudad, estado, codigo_postal, pais } = req.body;
 
   console.log('Datos recibidos:', req.body);  // Verifica que los datos son los correctos
 
