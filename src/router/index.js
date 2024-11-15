@@ -54,13 +54,13 @@ const router = createRouter({
       component : () => import('../views/BajaUsuarioView.vue')
     },
     {
-      path : '/Datos de usuario',
-      name :  'Datos de usuario',
+      path : '/Datos_de_usuario',
+      name :  'Datos_de_usuario',
       component : () => import('../views/UsuarioAltaView.vue')
     },
     {
-      path : '/Datos de direccion',
-      name :  'Datos de direccion',
+      path : '/Datos_de_direccion',
+      name :  'Datos_de_direccion',
       component : () => import('../views/DireccionAltaView.vue')
     },
     {

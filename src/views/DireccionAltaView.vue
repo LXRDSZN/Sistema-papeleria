@@ -4,7 +4,7 @@ import ComponentDirecciones from '@/components/Component-Direcciones.vue';
 </script>
 
 <template>
-    <div class="Bajas">
+    <div class="Direccion-user">
         <Navbar/>
         <ComponentDirecciones/>
     </div>

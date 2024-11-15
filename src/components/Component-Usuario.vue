@@ -4,7 +4,7 @@ import { ref } from 'vue';
 // Importamos Axios para hacer la solicitud HTTP
 import axios from 'axios';
 
-//id de los campos de usuario
+// Variables reactivas para los campos del formulario
 const curp = ref('');
 const apellido_paterno = ref('');
 const apellido_materno = ref('');
@@ -17,11 +17,12 @@ const rol = ref('');
 
 // Variable para el mensaje de error
 const errorMessage = ref('');
+const successMessage = ref('');
 
 // Función para registrar un usuario
 const registerUser = async () => {
   // Validamos si los campos de los datos de usuarios no estén vacíos
-  if (!curp.value || !apellido_paterno.value || !apellido_materno.value || !nombre.value || !correo.value || !telefono.value || !username.value || !password.value ||  !rol.value) {
+  if (!curp.value || !apellido_paterno.value || !apellido_materno.value || !nombre.value || !correo.value || !telefono.value || !username.value || !password.value || !rol.value) {
     errorMessage.value = 'Por favor, completa todos los campos del Usuario';
     return;
   }
@@ -42,7 +43,7 @@ const registerUser = async () => {
   try {
     // Realizamos la solicitud POST para registrar el usuario
     const response = await axios.post('http://localhost:5000/api/auth/registrar', {
-      curp: curp.value,               // Asegúrate de enviar la curp
+      curp: curp.value,
       apellido_paterno: apellido_paterno.value,
       apellido_materno: apellido_materno.value,
       nombre: nombre.value,
@@ -53,10 +54,12 @@ const registerUser = async () => {
       rol_id: rol.value,
     });
 
-    // Si el registro es exitoso, redirige o limpia el formulario
-    if (response.data.success) {
-      alert('Registro exitoso');
-      window.location.href = '/Datos de direccion';
+    // Verifica la respuesta del servidor
+    if (response.data.message === 'Usuario registrado exitosamente') {
+      successMessage.value = 'Usuario registrado exitosamente';
+      errorMessage.value = '';  // Limpiar mensaje de error si es exitoso
+      // Redirigir o limpiar el formulario, si es necesario
+      window.location.href = '/Datos_de_direccion';
     } else {
       errorMessage.value = 'Error en el registro de usuario. Intente nuevamente.';
     }
@@ -65,13 +68,13 @@ const registerUser = async () => {
     errorMessage.value = 'Error al registrar. Intente nuevamente.';
   }
 };
-
 </script>
+
 <template>
   <div class="sys-panel-usuario">
     <nav class="registros">
-      <RouterLink to="/Datos de usuario">Registar Usuario</RouterLink>
-      <RouterLink to="/Datos de direccion">Registrar Direccion</RouterLink>
+      <RouterLink to="/Datos_de_usuario">Registrar Usuario</RouterLink>
+      <RouterLink to="/Datos_de_direccion">Registrar Direccion</RouterLink>
     </nav>
     <div class="register-container">
       <section class="fields-container">
@@ -120,11 +123,16 @@ const registerUser = async () => {
         </div>
       </section>
   
+      <!-- Botón de registro -->
       <button class="register-button" @click="registerUser">Registrar</button>
+  
+      <!-- Mostrar mensajes de éxito y error -->
       <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
+      <p v-if="successMessage" style="color: green">{{ successMessage }}</p>
     </div>
   </div>
 </template>
+
 
   <style scoped>
   .sys-panel-usuario {

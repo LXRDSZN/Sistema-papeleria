@@ -65,8 +65,8 @@ const registerAddress3 = async () => {
 <template>
   <div class="sys-panel-direcciones">
     <nav class="registros">
-      <RouterLink to="/Datos de usuario">Registar Usuario</RouterLink>
-      <RouterLink to="/Datos de direccion">Registrar Direccion</RouterLink>
+      <RouterLink to="/Datos_de_usuario">Registar Usuario</RouterLink>
+      <RouterLink to="/Datos_de_direccion">Registrar Direccion</RouterLink>
     </nav>
     <div class="register-container">
       <section class="fields-container">  
