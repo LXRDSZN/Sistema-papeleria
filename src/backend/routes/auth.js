@@ -1,7 +1,8 @@
 import express from 'express';
 import { checkUserCredentials } from '../models/user.js'; //modelos de usuario.js
 import { registerUser } from '../models/registrer.js'     //modelos de resistro de usuarios 
-import { registerAddress3 } from '../models/addres.js';     //modelos de registro de direcciones 
+import { registerAddress3 } from '../models/addres.js';   //modelos de registro de direcciones 
+import { eliminarUsuario } from '../models/remove-usuario.js';
 import jwt from 'jsonwebtoken';                           // Importamos JWT para crear un token de sesión 
 
 const router = express.Router();
@@ -41,7 +42,7 @@ router.post('/auth/registrar', async (req, res) => {
   }
 });
 
-
+//Ruta oara Registro de Direcciones 
 router.post('/auth/registrar-direccion', async (req, res) => {
   const { curp, calle, numero_exterior, numero_interior, colonia, ciudad, estado, pais, codigo_postal } = req.body;
 
@@ -62,5 +63,23 @@ router.post('/auth/registrar-direccion', async (req, res) => {
   }
 });
 
+
+// Ruta para eliminar un usuario
+router.post('/auth/bajausuario', async (req, res) => {
+  const { curp, username } = req.body;
+
+  try {
+    const result = await eliminarUsuario(curp, username);
+
+    if (result.success) {
+      return res.status(200).json({ message: result.message });
+    } else {
+      return res.status(400).json({ message: result.message });
+    }
+  } catch (error) {
+    console.error('Error al eliminar el usuario:', error);
+    return res.status(500).json({ message: 'Error del servidor', error });
+  }
+});
 
 export default router;

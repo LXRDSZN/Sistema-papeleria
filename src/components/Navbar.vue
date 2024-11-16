@@ -18,7 +18,7 @@
                     <RouterLink to="/Registrar"><span class="material-icons">person_add</span>Agregar Usuario</RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/Baja Usuario"><span class="material-icons">person_remove</span>Bajar Usuario</RouterLink>
+                    <RouterLink to="/Baja_Usuario"><span class="material-icons">person_remove</span>Bajar Usuario</RouterLink>
                 </li>
                 <li>
                     <RouterLink to="/Alta Producto">

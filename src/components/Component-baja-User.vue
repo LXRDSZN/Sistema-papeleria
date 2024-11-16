@@ -1,15 +1,50 @@
 <script setup>
+// Importamos ref para crear las variables reactivas
 import { ref } from 'vue';
+// Importamos Axios para hacer la solicitud HTTP
+import axios from 'axios';
 
+const errorMessage = ref('');
+const successMessage = ref('');
+
+// Variables del formulario
 const curp = ref('');
 const username = ref('');
 
-const eliminarUsuario = () => {
-  console.log("Eliminando usuario con CURP:", curp.value, "o Username:", username.value);
-  curp.value = '';
-  username.value = '';
+// Función para eliminar usuario
+const eliminarUsuario = async () => {
+  // Validamos que los campos no estén vacíos
+  if (!curp.value && !username.value) {
+    errorMessage.value = 'Por favor, ingresa el CURP o el nombre de usuario';
+    successMessage.value = '';
+    return;
+  }
+
+  try {
+    // Realizamos la solicitud POST para eliminar el usuario
+    const response = await axios.post('http://localhost:5000/api/auth/bajausuario', {
+      curp: curp.value,
+      username: username.value,
+    });
+
+    // Verifica la respuesta del servidor
+    if (response.data.message === 'Usuario borrado exitosamente') {
+      successMessage.value = 'Usuario borrado exitosamente';
+      errorMessage.value = ''; // Limpiar mensaje de error si es exitoso
+      // Redirigir a la página del panel
+      window.location.href = '/panel';
+    } else {
+      errorMessage.value = 'No se pudo borrar el usuario. Intente nuevamente.';
+      successMessage.value = '';
+    }
+  } catch (error) {
+    console.error('Error al eliminar el usuario:', error);
+    errorMessage.value = 'Error al conectar con el servidor. Intente nuevamente.';
+    successMessage.value = '';
+  }
 };
 </script>
+
 
 <template>
   <div class="delete-user">
@@ -30,7 +65,12 @@ const eliminarUsuario = () => {
       ⚠️
     </div>
 
-    <button class="delete-button" @click="eliminarUsuario">Eliminar Usuario</button>
+     <!-- Botón de registro -->
+     <button class="delete-button" @click="eliminarUsuario">Registrar</button>
+  
+     <!-- Mostrar mensajes de éxito y error -->
+     <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
+     <p v-if="successMessage" style="color: green">{{ successMessage }}</p>
   </div>
 </template>
 

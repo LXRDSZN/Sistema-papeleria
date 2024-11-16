@@ -49,7 +49,7 @@ const router = createRouter({
       component : () => import('../views/RegistroVenta.vue')
     },
     {
-      path : '/Baja Usuario',
+      path : '/Baja_Usuario',
       name : 'Baja Usuario',
       component : () => import('../views/BajaUsuarioView.vue')
     },
