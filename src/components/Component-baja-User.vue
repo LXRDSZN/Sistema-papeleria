@@ -3,48 +3,60 @@
 import { ref } from 'vue';
 // Importamos Axios para hacer la solicitud HTTP
 import axios from 'axios';
-
-const errorMessage = ref('');
-const successMessage = ref('');
+// Importamos el toast para notificaciones
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo de notificaciones
 
 // Variables del formulario
 const curp = ref('');
 const username = ref('');
 
+// Inicializa el toast para notificaciones
+const toast = useToast();
+
 // Función para eliminar usuario
 const eliminarUsuario = async () => {
   // Validamos que los campos no estén vacíos
   if (!curp.value && !username.value) {
-    errorMessage.value = 'Por favor, ingresa el CURP o el nombre de usuario';
-    successMessage.value = '';
+    toast.error('Por favor, ingresa el CURP o el nombre de usuario.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
     return;
   }
 
   try {
     // Realizamos la solicitud POST para eliminar el usuario
-    const response = await axios.post('http://localhost:5 000/api/auth/bajausuario', {
+    const response = await axios.post('http://localhost:5000/api/auth/bajausuario', {
       curp: curp.value,
       username: username.value,
     });
 
     // Verifica la respuesta del servidor
     if (response.data.message === 'Usuario borrado exitosamente') {
-      successMessage.value = 'Usuario borrado exitosamente';
-      errorMessage.value = ''; // Limpiar mensaje de error si es exitoso
-      // Redirigir a la página del panel
-      window.location.href = '/panel';
+      toast.success('Usuario borrado exitosamente.', {
+        position: 'top-right',
+        duration: 2000, // Duración del mensaje de éxito
+        dismissible: true,
+      });
     } else {
-      errorMessage.value = 'No se pudo borrar el usuario. Intente nuevamente.';
-      successMessage.value = '';
+      toast.error('No se pudo borrar el usuario. Intente nuevamente.', {
+        position: 'top-right',
+        duration: 5000,
+        dismissible: true,
+      });
     }
   } catch (error) {
     console.error('Error al eliminar el usuario:', error);
-    errorMessage.value = 'Error al conectar con el servidor. Intente nuevamente.';
-    successMessage.value = '';
+    toast.error('Hubo un problema con el usuario. Intenta nuevamente.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
   }
 };
 </script>
-
 
 <template>
   <div class="delete-user">

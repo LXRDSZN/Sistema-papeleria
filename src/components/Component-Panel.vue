@@ -64,7 +64,7 @@ const recentlyAddedProducts = [
   flex-direction: column;
   gap: 2rem;
   padding: 2rem;
-  max-height: 100%; /* Asegurarse de que no se salga de la pantalla */
+  max-height: 100%;
 }
 
 /* Estilo para las estadísticas */

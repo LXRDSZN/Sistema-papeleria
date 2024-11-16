@@ -1,8 +1,8 @@
 <script setup>
-// Importamos ref para crear las variables reactivas
-import { ref } from 'vue';
-// Importamos Axios para hacer la solicitud HTTP
-import axios from 'axios';
+import { ref } from 'vue'; // Variables reactivas
+import axios from 'axios'; // Solicitudes HTTP
+import { useToast } from 'vue-toast-notification'; // Notificaciones
+import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo de notificaciones
 
 // Variables reactivas para los campos del formulario
 const curp = ref('');
@@ -15,20 +15,23 @@ const username = ref('');
 const password = ref('');
 const rol = ref('');
 
-// Variables para el mensaje de error y éxito
-const errorMessage = ref('');
-const successMessage = ref('');
+// Inicializa el toast para notificaciones
+const toast = useToast();
 
 // Función para registrar un usuario
 const registerUser = async () => {
-  // Validamos si los campos de los datos del usuario no están vacíos
+  // Validamos si los campos están vacíos
   if (!curp.value || !apellido_paterno.value || !apellido_materno.value || !nombre.value || !correo.value || !telefono.value || !username.value || !password.value || !rol.value) {
-    errorMessage.value = 'Por favor, completa todos los campos del Usuario';
+    toast.error('Por favor, completa todos los campos del formulario.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
     return;
   }
 
   try {
-    // Realizamos la solicitud POST para registrar el usuario
+    // Realizamos la solicitud POST al backend
     const response = await axios.post('http://localhost:5000/api/auth/registrar', {
       curp: curp.value,
       apellido_paterno: apellido_paterno.value,
@@ -43,26 +46,39 @@ const registerUser = async () => {
 
     // Verifica la respuesta del servidor
     if (response.data.message === 'Usuario registrado exitosamente') {
-      successMessage.value = 'Usuario registrado exitosamente';
-      errorMessage.value = '';  // Limpiar mensaje de error si es exitoso
-      // Redirigir a la página de dirección con la CURP como parámetro
-      window.location.href = `/Datos_de_direccion?curp=${curp.value}`;
+      toast.success('Usuario registrado exitosamente. Redirigiendo...', {
+        position: 'top-right',
+        duration: 2000, // Duración de la animación de éxito
+        dismissible: true,
+      });
+
+      // Redirigir con un pequeño retraso para mostrar el mensaje
+      setTimeout(() => {
+        window.location.href = `/Datos_de_direccion?curp=${curp.value}`; // Redirigir con la CURP
+      }, 750); // Retraso antes de redirigir
     } else {
-      errorMessage.value = 'Error en el registro de usuario. Intente nuevamente.';
+      toast.error('Error en el registro. Intente nuevamente.', {
+        position: 'top-right',
+        duration: 5000,
+        dismissible: true,
+      });
     }
   } catch (error) {
     console.error('Error al registrar:', error);
-    errorMessage.value = 'Error al registrar. Intente nuevamente.';
+    toast.error('Hubo un problema con el servidor. Intenta nuevamente.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
   }
 };
 </script>
-
 
 <template>
   <div class="sys-panel-usuario">
     <nav class="registros">
       <RouterLink to="/Datos_de_usuario">Registrar Usuario</RouterLink>
-      <RouterLink to="/Datos_de_direccion">Registrar Direccion</RouterLink>
+      <RouterLink to="/Datos_de_direccion">Registrar Dirección</RouterLink>
     </nav>
     <div class="register-container">
       <section class="fields-container">
@@ -70,53 +86,50 @@ const registerUser = async () => {
           <label for="curp">CURP:</label>
           <input type="text" id="curp" v-model="curp" placeholder="Ingrese su CURP" />
         </div>
-  
+
         <div class="field">
           <label for="apellido_paterno">Apellido Paterno:</label>
           <input type="text" id="apellido_paterno" v-model="apellido_paterno" placeholder="Ingrese su Apellido Paterno" />
         </div>
-  
+
         <div class="field">
           <label for="apellido_materno">Apellido Materno:</label>
           <input type="text" id="apellido_materno" v-model="apellido_materno" placeholder="Ingrese su Apellido Materno" />
         </div>
-  
+
         <div class="field">
           <label for="nombre">Nombre:</label>
           <input type="text" id="nombre" v-model="nombre" placeholder="Ingrese su Nombre" />
         </div>
-  
+
         <div class="field">
           <label for="correo">Correo:</label>
           <input type="email" id="correo" v-model="correo" placeholder="Ingrese su Correo" />
         </div>
-  
+
         <div class="field">
           <label for="telefono">Teléfono:</label>
           <input type="tel" id="telefono" v-model="telefono" placeholder="Ingrese su Teléfono" />
         </div>
-  
+
         <div class="field">
           <label for="username">Usuario:</label>
           <input type="text" id="username" v-model="username" placeholder="Ingrese su Usuario" />
         </div>
-  
+
         <div class="field">
           <label for="password">Contraseña:</label>
           <input type="password" id="password" v-model="password" placeholder="Ingrese su Contraseña" />
         </div>
+
         <div class="field">
           <label for="rol">Rol:</label>
           <input type="text" id="rol" v-model="rol" placeholder="Ingrese el Rol" />
         </div>
       </section>
-  
+
       <!-- Botón de registro -->
       <button class="register-button" @click="registerUser">Registrar</button>
-  
-      <!-- Mostrar mensajes de éxito y error -->
-      <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
-      <p v-if="successMessage" style="color: green">{{ successMessage }}</p>
     </div>
   </div>
 </template>
