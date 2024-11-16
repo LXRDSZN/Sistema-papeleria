@@ -14,46 +14,62 @@
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   </div>
 </template>
-
 <script setup>
-// Importamos ref para crear las variables reactivas
-import { ref } from 'vue'; 
- // Importamos Axios para hacer la solicitud HTTP 
-import axios from 'axios'; 
+import { ref } from 'vue';
+import { useRouter } from 'vue-router'; // Para redirigir entre rutas
+import axios from 'axios';
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
-// Variables reactivas para almacenar el usuario, la contraseña y el mensaje de error
+// Variables reactivas
 const username = ref('');
 const password = ref('');
-const errorMessage = ref('');
+
+// Inicializa el toast
+const toast = useToast();
+const router = useRouter(); // Router para redirigir
 
 // Función de login
 const login = async () => {
-  // Validamos si los campos no están vacíos
   if (!username.value || !password.value) {
-    errorMessage.value = 'Por favor, ingresa ambos campos';
+    toast.error('Por favor, ingresa ambos campos', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
     return;
   }
 
   try {
-    // Realizamos la solicitud POST para el login
     const response = await axios.post('http://localhost:5000/api/auth/login', {
       usuario: username.value,
       contrasena: password.value,
     });
 
-    // Si la respuesta es exitosa, guardamos el token en el almacenamiento local
     if (response.data.token) {
+      // Guarda el token en localStorage
       localStorage.setItem('token', response.data.token);
-      // Redirigimos al panel de usuario o al dashboard
-      window.location.href = '/panel'; 
+
+      // Muestra un mensaje de éxito
+      toast.success('Inicio de sesión exitoso. Bienvenido!', {
+        position: 'top-right',
+        duration: 2000, //duracion de la animaciondel login exitoso
+        dismissible: true,
+      });
+
+      // Añadimos un pequeño retraso para que el usuario vea el mensaje antes de la redirección
+      setTimeout(() => {
+        router.push('/panel'); // Redirigir al panel
+      }, 750); // tiempo de redireccion al panel 
     }
   } catch (error) {
-    // Manejamos los errores en caso de credenciales incorrectas
-    if (error.response && error.response.data) {
-      errorMessage.value = error.response.data.message || 'Error al iniciar sesión';
-    } else {
-      errorMessage.value = 'Hubo un problema con la conexión';
-    }
+    const message =
+      error.response?.data?.message || 'Hubo un problema con la conexión';
+    toast.error(message, {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
   }
 };
 </script>

@@ -22,7 +22,7 @@ const eliminarUsuario = async () => {
 
   try {
     // Realizamos la solicitud POST para eliminar el usuario
-    const response = await axios.post('http://localhost:5000/api/auth/bajausuario', {
+    const response = await axios.post('http://localhost:5 000/api/auth/bajausuario', {
       curp: curp.value,
       username: username.value,
     });
