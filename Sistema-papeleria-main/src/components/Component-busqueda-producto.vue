@@ -2,9 +2,9 @@
 import DataTable from './complements/DataTable.vue';
 
 const datosDeCompra = [
-    { CB: 1, Nombre: 'kike', Marca: 'chantillin', Stock: '$50.00', PrecioV: '$20-00', PrecioC: '$4'},
-    { CB: 2, Nombre: 'andres', Marca: 'chantillin', Stock: '$20.00', PrecioV: '$20-00', PrecioC: '$4'},
-    { CB: 3, Nombre: 'cesar', Marca: 'chantillin', Stock: '$15.00', PrecioV: '$20-00', PrecioC: '$4'}
+    { CB: 1, Nombre: 'kike', Marca: 'chantillin', Stock: '$50.00', PrecioC: '$20.00', PrecioV: '$4'},
+    { CB: 2, Nombre: 'andres', Marca: 'chantillin', Stock: '$20.00', PrecioC: '$20.00', PrecioV: '$4'},
+    { CB: 3, Nombre: 'cesar', Marca: 'chantillin', Stock: '$15.00', PrecioC: '$20.00', PrecioV: '$4'}
   ]
 </script>
 
@@ -114,10 +114,10 @@ input[type="text"], select {
 .tabla-busqueda {
   color: #000000;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 5pxC
 }
 
-.boton-eliminar-busqueda {
+.b.ton-eliminaV-busqueda {
   display: block;
   margin: 0 auto;
   width: 20%;
