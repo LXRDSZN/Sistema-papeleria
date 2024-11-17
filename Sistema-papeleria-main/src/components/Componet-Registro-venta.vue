@@ -35,16 +35,25 @@ const datosDeCompra = [
       <!-- Tabla de productos -->
       <div class="tabla-venta">
         <DataTable title="Tabla de Venta" :data="datosDeCompra" />
+
+      </div>
+      <div class="formulario-datos-usuario">
+
+        <div class="formulario-datos">
+          <label>Total de Venta</label>
+          <p class="precio"> $500 </p>
+        </div>
+        <!-- Generar reporte -->
+        <div class="formulario-datos">
+          <p>Generar Reporte</p>
+          <select>
+            <option>Seleccione la forma</option>
+          </select>
+        </div>
       </div>
 
-      <!-- Generar reporte -->
-      <div class="generar-reporte">
-        <p>Generar Reporte</p>
-        <select>
-          <option>Seleccione la forma</option>
-        </select>
-      </div>
       <button class="boton-generar-reporte">General</button>
+
     </div>
   </div>
 </template>
@@ -95,6 +104,13 @@ h3 {
 label, p {
   font-size: 1.5rem;
   color: #333;
+}
+
+.precio {
+  border-bottom: 2px solid black; 
+  color: green; 
+  text-align: left;
+  width: 25%;
 }
 
 input[type="text"], input[type="number"], select {
