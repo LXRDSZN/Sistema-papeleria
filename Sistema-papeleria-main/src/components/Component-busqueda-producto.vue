@@ -117,7 +117,7 @@ input[type="text"], select {
   border-radius: 5pxC
 }
 
-.b.ton-eliminaV-busqueda {
+.boton-eliminar-busqueda {
   display: block;
   margin: 0 auto;
   width: 20%;
