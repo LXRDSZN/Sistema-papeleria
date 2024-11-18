@@ -20,15 +20,40 @@
 
 Aquí puedes ver algunas capturas de pantalla del sistema que se encuentran en la carpeta `images`:
 
-### Ejemplo de Interfaz
-![Screenshot 1](./images/2024-11-09-23:44:14-screenshot.png)
+### Ejemplo de Login
+![Screenshot 1](./images/2024-11-17-23:26:08-screenshot.png)
 
-![Screenshot 2](./images/2024-11-09-23:44:31-screenshot.png)
+
 
 ### Más Detalles del Sistema
-![Screenshot 3](./images/2024-11-09-23:45:06-screenshot.png)
 
-![Screenshot 4](./images/2024-11-09-23:45:16-screenshot.png)
+### Panel de control 
+![Screenshot 2](./images/2024-11-17-23:26:37-screenshot.png)
+
+### Panel de registro de usuarios y direcciones  
+
+![Screenshot7](./images/2024-11-17-23:26:53-screenshot.png)
+![Screenshot 8](./images/2024-11-17-23:27:07-screenshot.png)
+
+### Panel de baja de usuarios
+
+![Screenshot 3](./images/2024-11-17-23:27:19-screenshot.png)
+
+### Panel de alta de productos
+
+![Screenshot 4](./images/2024-11-17-23:27:46-screenshot.png)
+
+### Panel de baja de productos
+
+
+![Screenshot 5](./images/2024-11-17-23:27:56-screenshot.png)
+
+### Panel de venta de productos
+
+![Screenshot 6](./images/2024-11-17-23:28:14-screenshot.png)
+
+
+
 
 ## Configuración Recomendada de IDE
 
