@@ -17,7 +17,7 @@ const datosDeCompra = [
       <!-- Formulario de ingreso -->
       <div class="formulario-datos-usuario">
         <div class="formulario-datos">
-          <label>CD</label>
+          <label>Codigo de Barras</label>
           <input type="text" placeholder="Ingrese el código de barras" />
         </div>
         <div class="formulario-datos">
@@ -52,7 +52,10 @@ const datosDeCompra = [
         </div>
       </div>
 
-      <button class="boton-generar-reporte">General</button>
+      <div class="botones-accion">
+        <button class="boton-venta">Realizar Venta</button>
+        <button class="boton-generar-reporte">General</button>
+      </div>
 
     </div>
   </div>
@@ -160,9 +163,17 @@ input[type="text"], input[type="number"], select {
   gap: 1rem;
 }
 
+.boton-venta {
+  width: 20%;
+  padding: 0.8rem 1.5rem;
+  background-color: #009e22;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
 .boton-generar-reporte {
-  display: block;
-  margin: 0 auto;
   width: 20%;
   padding: 0.8rem 1.5rem;
   background-color: #00509e;

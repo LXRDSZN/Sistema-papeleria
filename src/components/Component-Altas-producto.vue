@@ -9,7 +9,7 @@
       <!-- Campos de formulario -->
 
       <div class="form-group">
-        <label>CD</label>
+        <label>Codigo de Barras</label>
         <input type="text" placeholder="Ingrese el código de barras" />
       </div>
 
