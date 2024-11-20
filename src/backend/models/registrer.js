@@ -17,7 +17,7 @@ export const registerUser = async (curp, apellido_paterno, apellido_materno, nom
     // Devuelve los datos del usuario recién registrado
     return res.rows[0];  // Devuelve la fila insertada
   } catch (error) {
-    console.error('Error al registrar el usuario:', error);
+    console.error('Error al registrar el  usuario:', error);
     throw error;  // Lanza el error para que se maneje en el controlador
   }
 };

@@ -1,52 +1,160 @@
 <script setup>
+import { ref } from 'vue'; // Variables reactivas
+import axios from 'axios'; // Solicitudes HTTP
+import { useToast } from 'vue-toast-notification'; // Notificaciones
+import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo de notificaciones
+
+// Variables reactivas para los campos del formulario
+const Codigo_barras = ref('');
+const Nombre_producto = ref('');
+const Cantidad_producto = ref('');
+const Precio_compra = ref('');
+const precio_venta = ref('');
+const selectedCategory = ref(''); // Almacena la categoría seleccionada
+
+const toast = useToast();
+
+// Lista estática de categorías
+const categories = ref([
+  { id: 1, nombre: 'Hojas blancas' },
+  { id: 2, nombre: 'Cuadernos' },
+  { id: 3, nombre: 'Lápices' },
+  { id: 4, nombre: 'Bolígrafos' },
+  { id: 5, nombre: 'Gomas' },
+  { id: 6, nombre: 'Sacapuntas' },
+  { id: 7, nombre: 'Correctores' },
+]);
+
+// Función para dar de alta un producto
+const resgistrerproducto = async () => {
+  if (
+    !Codigo_barras.value ||
+    !Nombre_producto.value ||
+    !Cantidad_producto.value ||
+    !Precio_compra.value ||
+    !precio_venta.value ||
+    !selectedCategory.value
+  ) {
+    toast.error('Por favor, completa todos los campos del formulario.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+    return;
+  }
+
+  try {
+    // Realizamos la solicitud POST al backend
+    const response = await axios.post('http://localhost:5000/api/auth/altaproducto', {
+      Codigo_barras: Codigo_barras.value,
+      Nombre_producto: Nombre_producto.value,
+      Cantidad_producto: Cantidad_producto.value,
+      Precio_compra: Precio_compra.value,
+      precio_venta: precio_venta.value,
+      categoria: selectedCategory.value, // Enviar la categoría seleccionada
+    });
+
+    // Verifica la respuesta del servidor
+    if (response.data.message === 'Producto registrado exitosamente') {
+      toast.success('Producto registrado exitosamente. Redirigiendo...', {
+        position: 'top-right',
+        duration: 2000, // Duración de la animación de éxito
+        dismissible: true,
+      });
+
+      // Redirigir con un pequeño retraso para mostrar el mensaje
+      setTimeout(() => {
+        window.location.href = `/Panel`; // Redirigir a la página del panel
+      }, 750); // Retraso antes de redirigir
+    } else {
+      toast.error('Error en el registro. Intente nuevamente.', {
+        position: 'top-right',
+        duration: 5000,
+        dismissible: true,
+      });
+    }
+  } catch (error) {
+    console.error('Error al registrar:', error);
+    toast.error('Hubo un problema con el servidor. Intenta nuevamente.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+  }
+};
 </script>
 
 <template>
   <div class="sys-Alta-producto">
-    <div class="panel-Alta ">
+    <div class="panel-Alta">
       <h3>Alta de Productos</h3>
 
       <!-- Campos de formulario -->
 
       <div class="form-group">
-        <label>Codigo de Barras</label>
-        <input type="text" placeholder="Ingrese el código de barras" />
+        <label for="Codigo_barras">Código de Barras</label>
+        <input
+          type="text"
+          id="Codigo_barras"
+          placeholder="Ingrese el código de barras"
+          v-model="Codigo_barras"
+        />
       </div>
 
       <div class="form-group">
-        <label>Categoría</label>
-        <select>
-          <option>Seleccione la categoría</option>
-          <option>Gomas</option>
+        <label for="Categoria">Categoría</label>
+        <select id="Categoria" v-model="selectedCategory">
+          <option value="">Seleccione la categoría</option>
+          <option v-for="category in categories" :key="category.id" :value="category.nombre">
+            {{ category.nombre }}
+          </option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>Nombre</label>
-        <input type="text" placeholder="Ingrese el nombre del producto" />
+        <label for="Nombre_producto">Nombre</label>
+        <input
+          type="text"
+          id="Nombre_producto"
+          placeholder="Ingrese el nombre del producto"
+          v-model="Nombre_producto"
+        />
       </div>
 
       <div class="form-group">
-        <label>Cantidad</label>
-        <input type="number" placeholder="Ingrese la cantidad del producto" />
+        <label for="Cantidad_producto">Cantidad</label>
+        <input
+          type="number"
+          id="Cantidad_producto"
+          placeholder="Ingrese la cantidad del producto"
+          v-model="Cantidad_producto"
+        />
       </div>
 
       <div class="form-group">
-        <label>Precio de Compra</label>
-        <input type="text" placeholder="Ingrese el precio de compra" />
+        <label for="Precio_compra">Precio de Compra</label>
+        <input
+          type="text"
+          id="Precio_compra"
+          placeholder="Ingrese el precio de compra"
+          v-model="Precio_compra"
+        />
       </div>
 
       <div class="form-group">
-        <label>Precio Venta</label>
-        <input type="text" placeholder="Ingrese el precio de venta" />
+        <label for="precio_venta">Precio de Venta</label>
+        <input
+          type="text"
+          id="precio_venta"
+          placeholder="Ingrese el precio de venta"
+          v-model="precio_venta"
+        />
       </div>
-      
-      <button class="save-button">Guardar</button>
 
+      <button class="save-button" @click="resgistrerproducto">Guardar</button>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 /* Contenedor principal del panel */

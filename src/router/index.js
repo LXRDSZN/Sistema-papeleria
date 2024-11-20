@@ -29,12 +29,12 @@ const router = createRouter({
       component: () => import('../views/PanelView.vue')
     }
     ,{
-      path : '/Alta Producto',
+      path : '/Alta_Producto',
       name : 'Alta Producto',
       component : () => import('../views/AltasView.vue')
     },
     {
-      path : '/Baja Producto',
+      path : '/Baja_Producto',
       name : 'Baja Producto',
       component : () => import('../views/BajasView.vue')
     },

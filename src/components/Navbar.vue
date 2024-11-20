@@ -21,12 +21,12 @@
                     <RouterLink to="/Baja_Usuario"><span class="material-icons">person_remove</span>Bajar Usuario</RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/Alta Producto">
+                    <RouterLink to="/Alta_Producto">
                         <span class="material-icons">add_circle</span> Alta de productos
                     </RouterLink>
                 </li>
                 <li>
-                    <RouterLink to="/Baja Producto">
+                    <RouterLink to="/Baja_Producto">
                         <span class="material-icons">remove_circle</span> Baja de productos
                     </RouterLink>
                 </li>

@@ -1,5 +1,62 @@
 <script setup>
+import { ref } from 'vue'; // Variables reactivas
+import axios from 'axios'; // Solicitudes HTTP
+import { useToast } from 'vue-toast-notification'; // Notificaciones
+import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo de notificaciones
 
+// Variables reactivas para los campos del formulario
+const formaEliminacion = ref(''); // Selección de "Forma de Eliminar"
+const cantidadMerma = ref(''); // Cantidad de producto a eliminar
+const datoSeleccionado = ref(''); // Código de barras o nombre del producto
+
+const toast = useToast(); // Notificaciones
+
+// Función para eliminar producto
+const eliminarProducto = async () => {
+  if (!formaEliminacion.value || !cantidadMerma.value || !datoSeleccionado.value) {
+    toast.error('Por favor, completa todos los campos antes de continuar.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+    return;
+  }
+
+  try {
+    // Solicitud HTTP al backend para eliminar el producto
+    const response = await axios.post('http://localhost:5000/api/auth/bajaproducto', {
+      formaEliminacion: formaEliminacion.value,
+      cantidadMerma: cantidadMerma.value,
+      datoSeleccionado: datoSeleccionado.value,
+    });
+
+    if (response.data.message === 'Producto eliminado exitosamente') {
+      toast.success('Producto eliminado exitosamente.', {
+        position: 'top-right',
+        duration: 2000,
+        dismissible: true,
+      });
+
+      // Limpiar los campos después de la eliminación exitosa
+      formaEliminacion.value = '';
+      cantidadMerma.value = '';
+      datoSeleccionado.value = '';
+    } else {
+      toast.error('Hubo un error al intentar eliminar el producto. Intente nuevamente.', {
+        position: 'top-right',
+        duration: 5000,
+        dismissible: true,
+      });
+    }
+  } catch (error) {
+    console.error('Error al eliminar el producto:', error);
+    toast.error('Error del servidor. Intente nuevamente más tarde.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+  }
+};
 </script>
 
 <template>
@@ -7,36 +64,45 @@
     <div class="panel-baja">
       <h3>Bajas de productos</h3>
 
-      <!--campo de trabajo-->
-
+      <!-- Campos del formulario -->
       <div class="datos-generales">
-
         <div class="datos-usuario">
-          <label>Forma de Eliminar</label>
-          <select>
-            <option>Seleccione la forma</option>
-            <option>Codigo de Barras</option>
-            <option>Nombre</option>
+          <label for="formaEliminacion">Forma de Eliminar</label>
+          <select id="formaEliminacion" v-model="formaEliminacion">
+            <option value="">Seleccione la forma</option>
+            <option value="Codigo de Barras">Código de Barras</option>
+            <option value="Nombre">Nombre</option>
           </select>
         </div>
-        
+
         <div class="datos-usuario">
-          <label >Cantidad (Merma)</label>
-          <input type="number" placeholder="Ingrese la cantidad del producto" />
+          <label for="cantidadMerma">Cantidad (Merma)</label>
+          <input
+            id="cantidadMerma"
+            type="number"
+            placeholder="Ingrese la cantidad del producto"
+            v-model="cantidadMerma"
+          />
         </div>
       </div>
 
       <div class="dato-seleccionado">
-        <label>Dato Seleccionado</label>
-        <input type="text" placeholder="Ingrese el dato correspondinte de la forma seleccionada" />
+        <label for="datoSeleccionado">Dato Seleccionado</label>
+        <input
+          id="datoSeleccionado"
+          type="text"
+          placeholder="Ingrese el dato correspondiente a la forma seleccionada"
+          v-model="datoSeleccionado"
+        />
       </div>
-      
-      <button class="boton-eliminar-producto">Eliminar</button>
+
+      <!-- Botón para eliminar el producto -->
+      <button class="boton-eliminar-producto" @click="eliminarProducto">
+        Eliminar
+      </button>
     </div>
-  
   </div>
 </template>
-
 
 <style scoped>
 /* Contenedor principal del panel, para que ocupe toda la pantalla */
@@ -49,7 +115,6 @@
   overflow-y: auto;
   margin-left: 250px;
   padding: 2rem;
-
 }
 
 /* Panel de contenido */
@@ -68,7 +133,7 @@ h3 {
   margin-bottom: 1rem;
 }
 
-.datos-generales{
+.datos-generales {
   display: flex;
   gap: 1rem;
 }
@@ -115,7 +180,7 @@ select {
   cursor: pointer;
 }
 
-.save-button:hover {
+.boton-eliminar-producto:hover {
   background-color: #00509e; /* Color más claro al pasar el ratón */
 }
 </style>
