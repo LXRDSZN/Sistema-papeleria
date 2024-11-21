@@ -4,16 +4,15 @@ import axios from 'axios'; // Solicitudes HTTP
 import { useToast } from 'vue-toast-notification'; // Notificaciones
 import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo de notificaciones
 
-// Variables reactivas para los campos del formulario
+// Variables reactivas
 const formaEliminacion = ref(''); // Selección de "Forma de Eliminar"
-const cantidadMerma = ref(''); // Cantidad de producto a eliminar
 const datoSeleccionado = ref(''); // Código de barras o nombre del producto
 
-const toast = useToast(); // Notificaciones
+const toast = useToast(); // Instancia de notificaciones
 
 // Función para eliminar producto
 const eliminarProducto = async () => {
-  if (!formaEliminacion.value || !cantidadMerma.value || !datoSeleccionado.value) {
+  if (!formaEliminacion.value || !datoSeleccionado.value) {
     toast.error('Por favor, completa todos los campos antes de continuar.', {
       position: 'top-right',
       duration: 5000,
@@ -23,26 +22,24 @@ const eliminarProducto = async () => {
   }
 
   try {
-    // Solicitud HTTP al backend para eliminar el producto
+    // Llamada a la API
     const response = await axios.post('http://localhost:5000/api/auth/bajaproducto', {
       formaEliminacion: formaEliminacion.value,
-      cantidadMerma: cantidadMerma.value,
       datoSeleccionado: datoSeleccionado.value,
     });
 
-    if (response.data.message === 'Producto eliminado exitosamente') {
+    if (response.data.success) {
       toast.success('Producto eliminado exitosamente.', {
         position: 'top-right',
         duration: 2000,
         dismissible: true,
       });
 
-      // Limpiar los campos después de la eliminación exitosa
+      // Limpiar los campos
       formaEliminacion.value = '';
-      cantidadMerma.value = '';
       datoSeleccionado.value = '';
     } else {
-      toast.error('Hubo un error al intentar eliminar el producto. Intente nuevamente.', {
+      toast.error(response.data.message || 'Error al intentar eliminar el producto.', {
         position: 'top-right',
         duration: 5000,
         dismissible: true,
@@ -64,7 +61,7 @@ const eliminarProducto = async () => {
     <div class="panel-baja">
       <h3>Bajas de productos</h3>
 
-      <!-- Campos del formulario -->
+      <!-- Formulario -->
       <div class="datos-generales">
         <div class="datos-usuario">
           <label for="formaEliminacion">Forma de Eliminar</label>
@@ -73,16 +70,6 @@ const eliminarProducto = async () => {
             <option value="Codigo de Barras">Código de Barras</option>
             <option value="Nombre">Nombre</option>
           </select>
-        </div>
-
-        <div class="datos-usuario">
-          <label for="cantidadMerma">Cantidad (Merma)</label>
-          <input
-            id="cantidadMerma"
-            type="number"
-            placeholder="Ingrese la cantidad del producto"
-            v-model="cantidadMerma"
-          />
         </div>
       </div>
 
@@ -96,13 +83,14 @@ const eliminarProducto = async () => {
         />
       </div>
 
-      <!-- Botón para eliminar el producto -->
+      <!-- Botón -->
       <button class="boton-eliminar-producto" @click="eliminarProducto">
         Eliminar
       </button>
     </div>
   </div>
 </template>
+
 
 <style scoped>
 /* Contenedor principal del panel, para que ocupe toda la pantalla */

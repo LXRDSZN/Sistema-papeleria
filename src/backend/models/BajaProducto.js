@@ -1,47 +1,42 @@
-import client from './db.js'; // Cliente de la base de datos
+import client from './db.js'; // Importa el cliente de conexión a la base de datos
 
-/**
- * Elimina o actualiza un producto en la base de datos según los datos proporcionados.
- * @param {Object} req - La solicitud HTTP.
- * @param {Object} res - La respuesta HTTP.
- */
-export const eliminarProducto = async (req, res) => {
-  const { formaEliminacion, cantidadMerma, datoSeleccionado } = req.body;
 
+export const eliminarProducto = async (formaEliminacion, datoSeleccionado) => {
   try {
-    // Validación de campos
+    // Verifica que ambos parámetros estén presentes
     if (!formaEliminacion || !datoSeleccionado) {
-      return res.status(400).json({ message: 'Forma de eliminación y dato seleccionado son obligatorios.' });
+      return { success: false, message: "Debes proporcionar ambos parámetros: forma de eliminación y dato seleccionado." };
     }
 
-    // Construcción de la consulta
-    let query;
-    const values = [datoSeleccionado];
+    // Consulta SQL dependiendo de la forma de eliminación
+    let query = '';
+    const values = [];
 
-    if (cantidadMerma) {
-      // Actualización de la cantidad (merma)
-      query = `UPDATE productos SET cantidad = cantidad - $2 WHERE ${
-        formaEliminacion === 'Codigo de Barras' ? 'codigo_barras' : 'nombre'
-      } = $1 AND cantidad >= $2`;
-      values.push(cantidadMerma);
-    } else {
-      // Eliminación completa
-      query = `DELETE FROM productos WHERE ${
-        formaEliminacion === 'Codigo de Barras' ? 'codigo_barras' : 'nombre'
-      } = $1`;
+    // Si la forma de eliminación es por Código de Barras
+    if (formaEliminacion === 'Codigo de Barras') {
+      query = "DELETE FROM productos WHERE codigo_barras = $1";
+      values.push(datoSeleccionado); // El código de barras
+    } 
+    // Si la forma de eliminación es por Nombre
+    else if (formaEliminacion === 'Nombre') {
+      query = "DELETE FROM productos WHERE nombre = $1";
+      values.push(datoSeleccionado); // El nombre del producto
+    } 
+    else {
+      return { success: false, message: "Forma de eliminación no válida. Debe ser 'Codigo de Barras' o 'Nombre'." };
     }
 
-    // Ejecución de la consulta
+    // Ejecuta la consulta en la base de datos
     const result = await client.query(query, values);
 
-    // Verificar si se afectaron filas
+    // Verifica si se eliminó algún producto
     if (result.rowCount > 0) {
-      res.status(200).json({ message: cantidadMerma ? 'Producto actualizado exitosamente' : 'Producto eliminado exitosamente' });
+      return { success: true, message: "Producto eliminado exitosamente" };
     } else {
-      res.status(404).json({ message: 'No se encontró el producto con los datos proporcionados.' });
+      return { success: false, message: "No se encontró el producto con los datos proporcionados." };
     }
   } catch (error) {
-    console.error('Error al eliminar o actualizar producto:', error);
-    res.status(500).json({ message: 'Error del servidor. Intente nuevamente.' });
+    console.error("Error al eliminar producto:", error);
+    return { success: false, message: "Error al eliminar producto. Intente nuevamente." };
   }
 };

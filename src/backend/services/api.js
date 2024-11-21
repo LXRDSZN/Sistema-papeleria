@@ -91,23 +91,48 @@ export const eliminarUsuario = async (curp, username) => {
     throw error;
   }
 };
-
-// Función para registrar un nuevo producto
-export const resgistrerproducto = async (Codigo_barras, selectedCategory, Nombre_producto, Cantidad_producto, Precio_compra, precio_venta) => {
+//Funcion para agregar  un producto
+export const resgistrerproducto = async (codigo_barras, categoria, nombre, cantidad, precio_compra, precio_venta) => {
   try {
-    const response = await api.post('/auth/altaproducto', {
-      Codigo_barras, 
-      selectedCategory, 
-      Nombre_producto, 
-      Cantidad_producto, 
-      Precio_compra, 
+    console.log('Datos enviados a la API:', {
+      codigo_barras, 
+      categoria, 
+      nombre, 
+      cantidad, 
+      precio_compra, 
       precio_venta
+    });
+
+    const response = await api.post('/auth/altaproducto', {
+      codigo_barras, 
+      categoria, 
+      nombre, 
+      cantidad, 
+      precio_compra, 
+      precio_venta
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error al hacer registro:', error);
+    throw error;
+  }
+};
+
+
+//Funcion para borrar un producto 
+
+export const eliminarProducto = async (formaEliminacion, datoSeleccionado) =>{
+  try {
+    const response = await api.post('/auth/bajaproducto', {
+      formaEliminacion, 
+      datoSeleccionado
     });
 
     // Devuelve la respuesta de la API, que puede incluir un mensaje de éxito
     return response.data;
   } catch (error) {
-    console.error('Error al hacer registro:', error);
+    console.error('Error al eliminar el producto:', error);
     // Lanza el error para ser manejado en el componente Vue
     throw error;
   }

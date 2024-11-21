@@ -3,6 +3,7 @@ import { checkUserCredentials } from '../models/user.js';           //modelos de
 import { registerUser } from '../models/registrer.js'               //modelos de resistro de usuarios 
 import { registerAddress3 } from '../models/addres.js';             //modelos de registro de direcciones 
 import { resgistrerproducto } from '../models/AltasProductos.js';   //modelos de registro de productos 
+import { eliminarProducto } from '../models/BajaProducto.js';       //modelos para la eliminacion de productos 
 import { eliminarUsuario } from '../models/remove-usuario.js';      //modelo para la eliminacion de un usuario
 import jwt from 'jsonwebtoken';                                     // Importamos JWT para crear un token de sesión 
 
@@ -84,21 +85,59 @@ router.post('/auth/bajausuario', async (req, res) => {
 });
 
 //Ruta para agregar un producto 
-router.post('/auth/altaproducto', async (req,res) =>{
-  const {Codigo_barras, selectedCategory, Nombre_producto, Cantidad_producto, Precio_compra, precio_venta} = req.body;
-  try{
-    const result = await resgistrerproducto(Codigo_barras, selectedCategory, Nombre_producto, Cantidad_producto, Precio_compra, precio_venta);
-    if(result.success){
-      return res.status(200).json({message:result.message})
-    }else{
-      return res.status(400).json({message:result.message})
+router.post('/auth/altaproducto', async (req, res) => {
+  const { codigo_barras, categoria, nombre, cantidad, precio_compra, precio_venta } = req.body;
+
+  console.log("Datos recibidos en el servidor:", req.body); // Verifica los datos recibidos
+
+  try {
+    const newproducto = await resgistrerproducto(codigo_barras, categoria, nombre, cantidad, precio_compra, precio_venta);
+
+    if (newproducto) {
+      return res.status(201).json({ message: 'Producto registrado exitosamente', producto: newproducto });
+    } else {
+      return res.status(400).json({ message: 'No se pudo registrar el producto' });
     }
-
-  }catch(error){
-    console.error('Error al agregar el Producto',error);
-    return res.status(400).json({message:result.message})
+  } catch (error) {
+    console.error('Error al registrar el producto:', error);
+    return res.status(500).json({ message: 'Error del servidor', error });
   }
-
 });
 
+// Ruta para borrar un producto
+router.post('/auth/bajaproducto', async (req, res) => {
+  const { formaEliminacion, datoSeleccionado } = req.body;
+
+  try {
+    // Validar que se recibieron los datos necesarios
+    if (!formaEliminacion || !datoSeleccionado) {
+      return res.status(400).json({
+        success: false,
+        message: "Debes proporcionar la forma de eliminación y el dato correspondiente.",
+      });
+    }
+
+    // Llamar a la función de eliminación
+    const resultado = await eliminarProducto(formaEliminacion, datoSeleccionado);
+
+    // Devolver la respuesta con el resultado
+    if (resultado.success) {
+      return res.status(200).json({
+        success: true,
+        message: resultado.message,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: resultado.message,
+      });
+    }
+  } catch (error) {
+    console.error("Error al intentar eliminar el producto:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Hubo un error al intentar eliminar el producto.",
+    });
+  }
+});
 export default router;
