@@ -1,6 +1,8 @@
 <script setup>
 // Importamos ref para crear las variables reactivas
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { obtenerUsuarios } from '@/backend/services/api'; // Asegúrate de que la ruta sea correcta
+
 // Importamos Axios para hacer la solicitud HTTP
 import axios from 'axios';
 // Importamos el toast para notificaciones
@@ -66,6 +68,19 @@ const eliminarUsuario = async () => {
     });
   }
 };
+const usuarios = ref([]);  // Almacenará los usuarios obtenidos de la API
+// Obtener los usuarios cuando el componente se monta
+onMounted(async () => {
+  try {
+    // Llamamos a la función obtenerUsuarios que hace la solicitud
+    usuarios.value = await obtenerUsuarios();
+    console.log('Usuarios obtenidos:', usuarios.value);  // Para verificar los datos en la consola
+  } catch (err) {
+    error.value = 'No se pudieron cargar los usuarios. Intenta más tarde.';
+    console.error('Error al obtener los usuarios:', err);
+  }
+});
+
 </script>
 
 
@@ -94,10 +109,65 @@ const eliminarUsuario = async () => {
      <!-- Mostrar mensajes de éxito y error -->
      <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>
      <p v-if="successMessage" style="color: green">{{ successMessage }}</p>
+
+     <table border="1" class="usuarios-table">
+      <thead>
+        <td>CURP</td>
+        <td>USUARIO</td>
+        <td>ROL ID</td>
+      </thead>
+      <tbody>
+        <tr v-for="usuario in usuarios" :key="usuario.curp">
+          <td>{{ usuario.curp }}</td>
+          <td>{{ usuario.usuario}}</td>
+          <td>{{ usuario.rol_id}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <style scoped>
+
+
+/* Estilos para la tabla */
+.usuarios-table {
+  width: 100%;
+  margin-top: 4rem;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+.usuarios-table td, .usuarios-table th {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.usuarios-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.usuarios-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.usuarios-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Estilo para las celdas de la tabla */
+.usuarios-table td {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Ajuste de tamaño de las celdas */
+.usuarios-table td, .usuarios-table th {
+  word-wrap: break-word;
+  max-width: 200px;
+}
 .delete-user {
     display: flex;
     flex-direction: column;

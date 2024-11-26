@@ -15,16 +15,3 @@ export const consultausuarios = async () => {
     throw new Error('Error al consultar los usuarios.');
   }
 };
-//Funcion para consultar  usuarios para  su eliminacion 
-
-export const consultadropusuarios = async () =>{
-  try{
-    const dropuser = await client.query(
-      'SELECT curp, usuario, rol_id FROM usuarios '
-    );
-    return  dropuser.rows;
-  }catch(error){
-    console.error('Error al consultar de los usuarios.',error)
-    throw new Error('Error al consultar los usuarios.');  
-  }
-};

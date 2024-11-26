@@ -158,4 +158,7 @@ router.get('/auth/obtenerusuarios', async (req, res) => {
     res.status(500).json({ message: 'Error al consultar los usuarios', error: error.message });
   }
 });
+
 export default router;
+
+
