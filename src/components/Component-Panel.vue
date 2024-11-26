@@ -1,7 +1,6 @@
 <script setup>
 import StatisticBox from './complements/StatisticBox.vue';
-import DataTable from './complements/DataTable.vue';
-import RecentProducts from './complements/RecentProducts.vue';
+
 
 // Datos de ejemplo (en el futuro se obtendrán del backend)
 const bestSellingProducts = [
@@ -16,32 +15,45 @@ const recentSales = [
     { id: 3, product: 'Libreta Escolar', date: '2024-11-03', total: '$15.00' }
 ];
 
-const recentlyAddedProducts = [
-    { title: 'Goma de Borrar', price: '$5.00', category: 'Accesorios' },
-    { title: 'Tijeras', price: '$15.00', category: 'Material de Corte' },
-    { title: 'Pegamento en Barra', price: '$10.00', category: 'Adhesivos' }
-];
+
 </script>
 
 <template>
-    <div class="syste-panel">
-      <div class="panel">
-         <!-- Sección de Estadísticas -->
-          <div class="statistics">
-            <StatisticBox icon="users" label="Clientes" count="50" color="#4CAF50" />
-            <StatisticBox icon="tags" label="Categorías" count="12" color="#FF5722" />
-            <StatisticBox icon="box" label="Productos en Inventario" count="300" color="#03A9F4" />
-            <StatisticBox icon="shopping-bag" label="Ventas Mensuales" count="120" color="#FFC107" />
-          </div>
-          <!-- Sección de Tablas -->
-        <div class="tables">
-          <DataTable title="Productos Más Vendidos" :data="bestSellingProducts" />
-          <DataTable title="Últimas Ventas" :data="recentSales" />
-        </div>
-          <!-- Sección de Productos Recientes -->
-          <RecentProducts :products="recentlyAddedProducts" />
-        </div>
+  <div class="syste-panel">
+    <div class="panel">
+      <!-- Sección de Estadísticas -->
+      <div class="statistics">
+        <StatisticBox
+          icon="users"
+          label="Usuario"
+          count="10"
+          color="#4CAF50"
+          hoverColor="#388E3C" 
+        />
+        <StatisticBox
+          icon="tags"
+          label="Categorías"
+          count="12"
+          color="#FF5722"
+          hoverColor="#E64A19"
+        />
+        <StatisticBox
+          icon="box"
+          label="Productos en Inventario"
+          count="300"
+          color="#03A9F4"
+          hoverColor="#0288D1"
+        />
+        <StatisticBox
+          icon="shopping-bag"
+          label="Ventas Mensuales"
+          count="120"
+          color="#FFC107"
+          hoverColor="#FFA000"
+        />
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped>

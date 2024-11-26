@@ -20,11 +20,8 @@ const datosDeCompra = [
             <label>Forma de Busqueda</label>
             <select>
               <option>Seleccione la forma</option>
-<<<<<<< HEAD
               <option>CD</option>
-=======
               <option>Codigo de Barras</option>
->>>>>>> 0d8b6dea0c14f97044ae8381720ad42e59922d88
               <option>Nombre</option>
             </select>
           </div>

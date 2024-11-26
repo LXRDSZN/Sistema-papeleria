@@ -5,7 +5,9 @@ import { registerAddress3 } from '../models/addres.js';             //modelos de
 import { resgistrerproducto } from '../models/AltasProductos.js';   //modelos de registro de productos 
 import { eliminarProducto } from '../models/BajaProducto.js';       //modelos para la eliminacion de productos 
 import { eliminarUsuario } from '../models/remove-usuario.js';      //modelo para la eliminacion de un usuario
-import jwt from 'jsonwebtoken';                                     // Importamos JWT para crear un token de sesión 
+import { consultausuarios } from '../models/Usuarios.js';           //modelo para obtener usuarios
+import jwt from 'jsonwebtoken';                                     //Importamos JWT para crear un token de sesión 
+
 
 const router = express.Router();
 
@@ -138,6 +140,22 @@ router.post('/auth/bajaproducto', async (req, res) => {
       success: false,
       message: "Hubo un error al intentar eliminar el producto.",
     });
+  }
+});
+
+
+// Ruta para obtener los usuarios
+router.get('/auth/obtenerusuarios', async (req, res) => {
+  try {
+    // Llamamos a la función consultausuarios para obtener los usuarios
+    const usuarios = await consultausuarios();
+    
+    // Si todo va bien, enviamos los usuarios como respuesta
+    res.status(200).json(usuarios);
+  } catch (error) {
+    // Si hay algún error, devolvemos un mensaje de error
+    console.error('Error al obtener los usuarios:', error);
+    res.status(500).json({ message: 'Error al consultar los usuarios', error: error.message });
   }
 });
 export default router;

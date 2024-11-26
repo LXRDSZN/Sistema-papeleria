@@ -137,3 +137,17 @@ export const eliminarProducto = async (formaEliminacion, datoSeleccionado) =>{
     throw error;
   }
 };
+
+
+
+// Función para obtener usuarios
+export const obtenerUsuarios = async () => {
+  try {
+    // Realizamos una solicitud GET a la ruta completa en el backend
+    const response = await axios.get('http://localhost:5000/api/auth/obtenerusuarios');
+    return response.data;  // Devolvemos los datos de la respuesta (usuarios)
+  } catch (error) {
+    console.error('Error al obtener los usuarios:', error);
+    throw new Error('Error al obtener los usuarios.');
+  }
+};

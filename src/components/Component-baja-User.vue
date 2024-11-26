@@ -6,13 +6,18 @@ import axios from 'axios';
 // Importamos el toast para notificaciones
 import { useToast } from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo de notificaciones
+// Importamos useRouter para redirigir
+import { useRouter } from 'vue-router';
 
 // Variables del formulario
 const curp = ref('');
 const username = ref('');
 
-// Inicializa el toast para notificaciones
+// Inicializamos el toast para notificaciones
 const toast = useToast();
+
+// Inicializamos el router para redirecciones
+const router = useRouter();
 
 // Función para eliminar usuario
 const eliminarUsuario = async () => {
@@ -40,6 +45,11 @@ const eliminarUsuario = async () => {
         duration: 2000, // Duración del mensaje de éxito
         dismissible: true,
       });
+
+      // Añadimos un pequeño retraso antes de redirigir al panel
+      setTimeout(() => {
+        router.push('/panel'); // Redirigir al panel
+      }, 750); // Tiempo de redirección al panel
     } else {
       toast.error('No se pudo borrar el usuario. Intente nuevamente.', {
         position: 'top-right',
@@ -57,6 +67,7 @@ const eliminarUsuario = async () => {
   }
 };
 </script>
+
 
 <template>
   <div class="delete-user">

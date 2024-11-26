@@ -67,10 +67,15 @@ const router = createRouter({
       path : '/Soporte',
       name : 'Soporte',
       component : () => import('../views/soporteView.vue')
+    },
+    {
+      path : '/Consulta_Usuarios',
+      name : 'Consulta_Usuarios',
+      component : () => import('../views/UsuariosViews.vue')
     }
   
 
-  ]
+  ] 
 })
 
 export default router
