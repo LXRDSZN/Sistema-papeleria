@@ -7,6 +7,7 @@ import { eliminarProducto } from '../models/BajaProducto.js';       //modelos pa
 import { eliminarUsuario } from '../models/remove-usuario.js';      //modelo para la eliminacion de un usuario
 import { consultausuarios } from '../models/Usuarios.js';           //modelo para obtener usuarios
 import { ConsultaProducto } from '../models/ConsultaProducto.js';   //modelo para obtener la consuñta de produtos
+import { actualizarCantidadProducto } from '../models/ConsultaProductoactualizacion.js';
 import { registrarVenta } from '../models/ventas.js';               //modelo para registrar una venta 
 import jwt from 'jsonwebtoken';                                     //Importamos JWT para crear un token de sesión 
 
@@ -230,6 +231,24 @@ router.post('/auth/ventas', async (req, res) => {
   }
 });
 
+// Ruta para actualizar la cantidad del producto
+router.put('/auth/productos/:codigo_barras', async (req, res) => {
+  const { codigo_barras } = req.params;
+  const { cantidad } = req.body;
+
+  try {
+    const updatedProduct = await actualizarCantidadProducto(codigo_barras, cantidad);
+
+    if (updatedProduct) {
+      return res.status(200).json({ success: true, message: 'Cantidad actualizada con éxito' });
+    } else {
+      return res.status(400).json({ success: false, message: 'No se pudo actualizar la cantidad' });
+    }
+  } catch (error) {
+    console.error('Error al actualizar la cantidad:', error);
+    return res.status(500).json({ success: false, message: 'Error del servidor', error });
+  }
+});
 
 
 export default router;

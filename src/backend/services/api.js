@@ -192,3 +192,17 @@ export const registrarVenta = async (producto_id, cantidad, precio_total) => {
     throw error;
   }
 };
+
+// Función para actualizar el stock de un producto
+export const actualizarStock = async (codigo_barras, cantidad) => {
+  try {
+    const response = await api.put(`/auth/productos/${codigo_barras}`, {
+      cantidad, // Utilizar 'cantidad' en lugar de 'stock'
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error al actualizar la cantidad del producto:', error);
+    throw error;
+  }
+};

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios'; // Solicitudes HTTP
-import { obtenerProductos } from '@/backend/services/api'; // Asegúrate de que la ruta sea correcta
+import { obtenerProductos, actualizarStock } from '@/backend/services/api'; // Asegúrate de que la ruta sea correcta
 import { useToast } from 'vue-toast-notification'; // Para las notificaciones
 import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo para notificaciones
 
@@ -11,6 +11,8 @@ const productosVenta = ref([]); // Productos agregados a la venta
 const codigoBarras = ref('');
 const cantidad = ref(0);
 const totalVenta = ref(0);
+const producto_id = ref(''); // Definir producto_id
+const precio_total = ref(0); // Definir precio_total
 // Inicializa el toast para notificaciones
 const toast = useToast();
 
@@ -45,6 +47,15 @@ const guardarVenta = async () => {
     const producto = productos.value.find((p) => p.codigo_barras === codigoBarras.value);
 
     if (producto) {
+      if (producto.cantidad < cantidad.value) {
+        toast.error('No hay suficiente stock para el producto seleccionado.', {
+          position: 'top-right',
+          duration: 5000,
+          dismissible: true,
+        });
+        return;
+      }
+
       const precioCompra = producto.precio_compra;
       const subtotal = cantidad.value * precioCompra;
       totalVenta.value += subtotal;
@@ -73,6 +84,9 @@ const guardarVenta = async () => {
           eliminar: false // Agregar propiedad para el checkbox
         });
       }
+
+      // Actualizar la cantidad del producto en el inventario
+      producto.cantidad -= cantidad.value;
 
       // Limpiar los campos del formulario
       codigoBarras.value = '';
@@ -128,11 +142,22 @@ const registrarVenta = async () => {
 
       // Manejar la respuesta basándonos en el indicador success
       if (response.data.success) {
-        toast.success(`Venta registrada para el producto: ${producto.nombre}`, {
-          position: 'top-right',
-          duration: 2000,
-          dismissible: true,
-        });
+        // Actualizar la cantidad del producto en el backend
+        try {
+          await actualizarStock(producto.codigo_barras, -producto.cantidad);
+          toast.success(`Venta registrada para el producto: ${producto.nombre}`, {
+            position: 'top-right',
+            duration: 2000,
+            dismissible: true,
+          });
+        } catch (error) {
+          console.error('Error al actualizar la cantidad del producto:', error);
+          toast.error(`Venta registrada, pero no se pudo actualizar el stock del producto: ${producto.nombre}. Verifique manualmente.`, {
+            position: 'top-right',
+            duration: 5000,
+            dismissible: true,
+          });
+        }
       } else {
         toast.error(`Error al registrar el producto: ${producto.nombre}`, {
           position: 'top-right',
@@ -186,7 +211,6 @@ const registrarVenta = async () => {
         <button @click="eliminarSeleccionados" class="boton-eliminar">Eliminar Fila</button>
       </div>
 
-
       <!-- Tabla de productos en la venta -->
       <table border="1" class="usuarios-table" title="Tabla de búsqueda">
         <thead>
@@ -229,7 +253,7 @@ const registrarVenta = async () => {
       </div>
       
       <!-- Botón para realizar la venta -->
-      <button class="boton-venta" @click="realizarVenta" :disabled="productosVenta.length === 0">
+      <button class="boton-venta" @click="registrarVenta" :disabled="productosVenta.length === 0">
         Realizar Venta
       </button>
     </div>
