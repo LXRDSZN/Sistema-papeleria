@@ -166,3 +166,29 @@ export const obtenerProductos = async () => {
 };
 
 
+
+export const registrarVenta = async (producto_id, cantidad, precio_total) => {
+  try {
+    console.log('Datos enviados a la API /auth/ventas:', {
+      producto_id, 
+      cantidad, 
+      precio_total
+    });
+
+    const response = await api.post('/auth/ventas', {
+      producto_id, 
+      cantidad, 
+      precio_total
+    });
+
+    // Verifica si la venta fue registrada correctamente
+    if (response.data.success) {
+      return response.data;  // Devuelve los datos de la venta registrada
+    } else {
+      throw new Error(response.data.message || 'Error al registrar la venta');
+    }
+  } catch (error) {
+    console.error('Error al registrar la venta:', error);
+    throw error;
+  }
+};

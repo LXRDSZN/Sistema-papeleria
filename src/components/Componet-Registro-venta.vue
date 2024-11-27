@@ -1,14 +1,164 @@
 <script setup>
-import DataTable from './complements/DataTable.vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios'; // Solicitudes HTTP
+import { obtenerProductos } from '@/backend/services/api'; // Asegúrate de que la ruta sea correcta
+import { useToast } from 'vue-toast-notification'; // Para las notificaciones
+import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo para notificaciones
 
-const datosDeCompra = [
-    { CB: 1, nombre: 'kike', Cantidad: '1', PrecioU: '$50.00', PrecioS: '$20-00', fecha: '14/11/2024', Usuario: 'kike'},
-    { CB: 2, nombre: 'andres', Cantidad: '2', PrecioU: '$20.00', PrecioS: '$20-00', fecha: '14/11/2024', Usuario: 'kike'},
-    { CB: 3, nombre: 'cesar', Cantidad: '3', PrecioU: '$15.00', PrecioS: '$20-00', fecha: '14/11/2024', Usuario: 'kie'}
-  ]
+// Variables reactivas
+const productos = ref([]); // Lista de productos del inventario
+const productosVenta = ref([]); // Productos agregados a la venta
+const codigoBarras = ref('');
+const cantidad = ref(0);
+const totalVenta = ref(0);
+const producto_id = ref('');
+const precio_total = ref(0);
+// Inicializa el toast para notificaciones
+const toast = useToast();
 
+// Obtener los productos del inventario al montar el componente
+onMounted(async () => {
+  try {
+    productos.value = await obtenerProductos();
+    console.log('Productos obtenidos:', productos.value); // Verificar en consola
+  } catch (error) {
+    console.error('Error al obtener los productos:', error);
+    toast.error('No se pudieron cargar los productos. Intente nuevamente más tarde.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+  }
+});
+
+// Función para guardar la venta solo en la tabla (sin backend)
+const guardarVenta = async () => {
+  if (!codigoBarras.value || !cantidad.value) {
+    toast.error('Por favor, ingrese el código de barras y la cantidad antes de continuar.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+    return;
+  }
+
+  try {
+    // Buscar el producto en el inventario usando el código de barras
+    const producto = productos.value.find((p) => p.codigo_barras === codigoBarras.value);
+
+    if (producto) {
+      const precioCompra = producto.precio_compra;
+      const subtotal = cantidad.value * precioCompra;
+      totalVenta.value += subtotal;
+
+      // Generar fecha actual
+      const fechaActual = new Date().toISOString().split('T')[0];
+
+      // Verificar si el producto ya está en productosVenta
+      const productoEnVenta = productosVenta.value.find(
+        (p) => p.codigo_barras === codigoBarras.value
+      );
+
+      if (productoEnVenta) {
+        // Si ya existe, sumar la cantidad y recalcular el precio total
+        productoEnVenta.cantidad += cantidad.value;
+        productoEnVenta.precio_venta += subtotal;
+      } else {
+        // Si no existe, agregarlo como un nuevo producto
+        productosVenta.value.push({
+          codigo_barras: codigoBarras.value,
+          nombre: producto.nombre,
+          cantidad: cantidad.value,
+          precio_compra: precioCompra,
+          precio_venta: subtotal,
+          fecha: fechaActual,
+          eliminar: false // Agregar propiedad para el checkbox
+        });
+      }
+
+      // Limpiar los campos del formulario
+      codigoBarras.value = '';
+      cantidad.value = 0;
+
+      toast.success('Producto agregado a la venta.', {
+        position: 'top-right',
+        duration: 2000,
+        dismissible: true,
+      });
+    } else {
+      toast.error('El producto no existe. Verifique el código de barras.', {
+        position: 'top-right',
+        duration: 5000,
+        dismissible: true,
+      });
+    }
+  } catch (error) {
+    console.error('Error al agregar el producto:', error);
+    toast.error('Error del servidor. Intente nuevamente más tarde.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+  }
+};
+
+// Función para eliminar productos seleccionados
+function eliminarSeleccionados() {
+  // Filtrar los productos que no están marcados para eliminar
+  productosVenta.value = productosVenta.value.filter((producto) => !producto.eliminar);
+}
+
+
+// Función para registrar un usuario
+const registrarVenta = async () => {
+  // Validamos si los campos están vacíos
+  if (!producto_id.value||!cantidad.value||!precio_total.value) {
+    toast.error('Por favor, completa todos los campos del formulario.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+    return;
+  }
+
+  try {
+    // Realizamos la solicitud POST al backend
+    const response = await axios.post('http://localhost:5000/api/auth/ventas', {
+      producto_id: producto_id.value,
+      cantidad: cantidad.value,
+      precio_total: precio_total.value
+ 
+    });
+
+    // Verifica la respuesta del servidor
+    if (response.data.message === 'Usuario registrado exitosamente') {
+      toast.success('Usuario registrado exitosamente. Redirigiendo...', {
+        position: 'top-right',
+        duration: 2000, // Duración de la animación de éxito
+        dismissible: true,
+      });
+
+      // Redirigir con un pequeño retraso para mostrar el mensaje
+      setTimeout(() => {
+        router.push('/panel'); // Redirigir al panel de control
+      }, 750);
+    } else {
+      toast.error('Error en el registro. Intente nuevamente.', {
+        position: 'top-right',
+        duration: 5000,
+        dismissible: true,
+      });
+    }
+  } catch (error) {
+    console.error('Error al registrar:', error);
+    toast.error('Hubo un problema con el servidor. Intenta nuevamente.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+  }
+};
 </script>
-
 <template>
   <div class="sistema-panel-venta">
     <div class="panel-venta">
@@ -17,51 +167,171 @@ const datosDeCompra = [
       <!-- Formulario de ingreso -->
       <div class="formulario-datos-usuario">
         <div class="formulario-datos">
-          <label>Codigo de Barras</label>
-          <input type="text" placeholder="Ingrese el código de barras" />
+          <label>Código de Barras</label>
+          <input
+            v-model="codigoBarras"
+            type="text"
+            placeholder="Ingrese el código de barras"
+          />
         </div>
         <div class="formulario-datos">
           <label>Cantidad</label>
-          <input type="number" placeholder="Ingrese la cantidad del producto" />
+          <input
+            v-model.number="cantidad"
+            type="number"
+            placeholder="Ingrese la cantidad del producto"
+          />
         </div>
       </div>
 
       <!-- Botones de acción -->
       <div class="botones-accion">
-        <button class="boton-guardar">Guardar</button>
-        <button class="boton-eliminar">Eliminar Fila</button>
+        <button @click="guardarVenta" class="boton-guardar">Guardar</button>
+        <button @click="eliminarSeleccionados" class="boton-eliminar">Eliminar Fila</button>
       </div>
 
-      <!-- Tabla de productos -->
-      <div class="tabla-venta">
-        <DataTable title="Tabla de Venta" :data="datosDeCompra" />
 
+      <!-- Tabla de productos en la venta -->
+      <table border="1" class="usuarios-table" title="Tabla de búsqueda">
+        <thead>
+          <tr>
+            <th>ELIMINAR</th>
+            <th>CB</th>
+            <th>NOMBRE</th>
+            <th>CANTIDAD</th>
+            <th>PRECIO UNITARIO</th>
+            <th>PRECIO SUMA</th>
+            <th>FECHA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="producto in productosVenta" :key="producto.codigo_barras">
+            <td>
+              <input
+                type="checkbox"
+                v-model="producto.eliminar"
+                @change="toggleEliminar(producto)"
+              />
+            </td>
+            <td>{{ producto.codigo_barras }}</td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.cantidad }}</td>
+            <td>{{ producto.precio_compra }}</td>
+            <td>{{ producto.precio_venta }}</td>
+            <td>{{ producto.fecha }}</td>
+          </tr>
+        </tbody>
+      </table><!-- Campos de información de confirmacion -->
+      <div class="field-container">
+        <div class="field">
+          <label for="producto_id">Código de barras:</label>
+          <input
+            type="text"
+            id="producto_id"
+            v-model="producto_id"
+            placeholder="Ingrese el código de barras"
+          />
+        </div>
+      
+        <div class="field">
+          <label for="cantidad">Cantidad:</label>
+          <input
+            type="text"
+            id="cantidad"
+            v-model="cantidad"
+            placeholder="Ingrese la cantidad de producto"
+          />
+        </div>
+      
+        <div class="field">
+          <label for="precio_total">Precio Total:</label>
+          <input
+            type="text"
+            id="precio_total"
+            v-model="precio_total"
+            placeholder="Ingrese el precio total"
+          />
+        </div>
       </div>
+        <!-- Botón para realizar la venta -->
+        <button class="boton-venta" @click="registrarVenta"> Confirmar </button>
+      <!-- Total de venta -->
       <div class="formulario-datos-usuario">
-
         <div class="formulario-datos">
           <label>Total de Venta</label>
-          <p class="precio"> $500 </p>
-        </div>
-        <!-- Generar reporte -->
-        <div class="formulario-datos">
-          <p>Generar Reporte</p>
-          <select>
-            <option>Seleccione la forma</option>
-          </select>
+          <p class="precio"> ${{ totalVenta }} </p>
         </div>
       </div>
-
-      <div class="botones-accion">
-        <button class="boton-venta">Realizar Venta</button>
-        <button class="boton-generar-reporte">General</button>
-      </div>
-
+      
+      <!-- Botón para realizar la venta -->
+      <button class="boton-venta" @click="realizarVenta" :disabled="productosVenta.length === 0">
+        Realizar Venta
+      </button>
     </div>
   </div>
 </template>
 
-<style scoped>
+
+
+
+
+<style scoped>.field {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 0;
+}
+
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 12px; /* Puedes ajustar el tamaño de la fuente */
+}
+
+.field input {
+  width: 120px; /* Ajusta el tamaño del campo de entrada */
+  padding: 6px;
+  font-size: 12px; /* Ajusta el tamaño de la fuente */
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+.usuarios-table {
+  width: 100%;
+  margin-top: 4rem;
+  border-collapse: collapse;
+  border: 1px solid #ff0000;
+}
+
+.usuarios-table td, .usuarios-table th {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.usuarios-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.usuarios-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.usuarios-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Estilo para las celdas de la tabla */
+.usuarios-table td {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Ajuste de tamaño de las celdas */
+.usuarios-table td, .usuarios-table th {
+  word-wrap: break-word;
+  max-width: 200px;
+}
 /* Contenedor principal del panel */
 .sistema-panel-venta {
   position: fixed;
@@ -128,7 +398,6 @@ input[type="text"], input[type="number"], select {
   display: flex;
   justify-content: space-evenly;
   gap: 1rem;
-
 }
 
 .boton-guardar, .boton-eliminar {

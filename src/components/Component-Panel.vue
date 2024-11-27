@@ -26,28 +26,28 @@ const recentSales = [
         <StatisticBox
           icon="users"
           label="Usuario"
-          count="10"
+          count=""
           color="#4CAF50"
           hoverColor="#388E3C" 
         />
         <StatisticBox
           icon="tags"
           label="Categorías"
-          count="12"
+          count=""
           color="#FF5722"
           hoverColor="#E64A19"
         />
         <StatisticBox
           icon="box"
           label="Productos en Inventario"
-          count="300"
+          count=""
           color="#03A9F4"
           hoverColor="#0288D1"
         />
         <StatisticBox
           icon="shopping-bag"
           label="Ventas Mensuales"
-          count="120"
+          count=""
           color="#FFC107"
           hoverColor="#FFA000"
         />

@@ -7,7 +7,7 @@ import { eliminarProducto } from '../models/BajaProducto.js';       //modelos pa
 import { eliminarUsuario } from '../models/remove-usuario.js';      //modelo para la eliminacion de un usuario
 import { consultausuarios } from '../models/Usuarios.js';           //modelo para obtener usuarios
 import { ConsultaProducto } from '../models/ConsultaProducto.js';   //modelo para obtener la consuñta de produtos
-import { ConsultaProductofiltro } from '../models/ConsultaFiltro.js';  // Cambia el nombre aquí
+import { registrarVenta } from '../models/ventas.js';               //modelo para registrar una venta 
 import jwt from 'jsonwebtoken';                                     //Importamos JWT para crear un token de sesión 
 
 
@@ -194,6 +194,29 @@ router.get('/auth/obtenerproductosfiltro', async (req, res) => {
 });
 
 
+
+router.post('/auth/ventas', async (req, res) => {
+  // Desestructuramos los datos recibidos del cuerpo de la solicitud
+  const { producto_id, cantidad, precio_total } = req.body;  // No recibimos fecha_venta
+
+  try {
+    // Llamamos a la función guardarVenta y pasamos los datos recibidos
+    const result = await registrarVenta(producto_id, cantidad, precio_total);
+
+    // Verificamos el resultado de la operación
+    if (result.success) {
+      // Si el registro fue exitoso, enviamos un mensaje de éxito
+      return res.status(200).json({ message: 'Venta registrada con éxito', data: result.data });
+    } else {
+      // Si hubo un error en el registro, enviamos un mensaje de error
+      return res.status(400).json({ message: result.message, error: result.error });
+    }
+  } catch (error) {
+    // Si ocurre un error inesperado, enviamos un error del servidor
+    console.error('Error al registrar la venta:', error);
+    return res.status(500).json({ message: 'Error del servidor', error });
+  }
+});
 
 
 export default router;
