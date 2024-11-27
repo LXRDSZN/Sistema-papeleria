@@ -6,6 +6,8 @@ import { resgistrerproducto } from '../models/AltasProductos.js';   //modelos de
 import { eliminarProducto } from '../models/BajaProducto.js';       //modelos para la eliminacion de productos 
 import { eliminarUsuario } from '../models/remove-usuario.js';      //modelo para la eliminacion de un usuario
 import { consultausuarios } from '../models/Usuarios.js';           //modelo para obtener usuarios
+import { ConsultaProducto } from '../models/ConsultaProducto.js';   //modelo para obtener la consuñta de produtos
+import { ConsultaProductofiltro } from '../models/ConsultaFiltro.js';  // Cambia el nombre aquí
 import jwt from 'jsonwebtoken';                                     //Importamos JWT para crear un token de sesión 
 
 
@@ -158,6 +160,41 @@ router.get('/auth/obtenerusuarios', async (req, res) => {
     res.status(500).json({ message: 'Error al consultar los usuarios', error: error.message });
   }
 });
+
+
+
+// Ruta para obtener los productos
+router.get('/auth/obtenerproductos', async (req, res) => {
+  try {
+    // Llamamos a la función consultaproductos para obtener los productos
+    const Productos = await ConsultaProducto();
+    
+    // Si todo va bien, enviamos los productos como respuesta
+    res.status(200).json(Productos);
+  } catch (error) {
+    // Si hay algún error, devolvemos un mensaje de error
+    console.error('Error al obtener los productos:', error);
+    res.status(500).json({ message: 'Error al consultar los productos', error: error.message });
+  }
+});
+
+// Ruta para obtener los productos
+router.get('/auth/obtenerproductosfiltro', async (req, res) => {
+  try {
+    // Llamamos a la función consultaproductos para obtener los productos
+    const Productos = await ConsultaProducto();
+    
+    // Si todo va bien, enviamos los productos como respuesta
+    res.status(200).json(Productos);
+  } catch (error) {
+    // Si hay algún error, devolvemos un mensaje de error
+    console.error('Error al obtener los productos:', error);
+    res.status(500).json({ message: 'Error al consultar los productos', error: error.message });
+  }
+});
+
+
+
 
 export default router;
 

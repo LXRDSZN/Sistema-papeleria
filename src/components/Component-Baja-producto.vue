@@ -1,14 +1,25 @@
 <script setup>
-import { ref } from 'vue'; // Variables reactivas
-import axios from 'axios'; // Solicitudes HTTP
-import { useToast } from 'vue-toast-notification'; // Notificaciones
-import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo de notificaciones
+// Importamos ref para crear las variables reactivas
+import { ref, onMounted } from 'vue';
+import { obtenerProductos } from '@/backend/services/api'; // Asegúrate de que la ruta sea correcta
 
-// Variables reactivas
+// Importamos Axios para hacer la solicitud HTTP
+import axios from 'axios';
+// Importamos el toast para notificaciones
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css'; // Estilo de notificaciones
+// Importamos useRouter para redirigir
+import { useRouter } from 'vue-router';
+
+// Variables del formulario
 const formaEliminacion = ref(''); // Selección de "Forma de Eliminar"
 const datoSeleccionado = ref(''); // Código de barras o nombre del producto
 
-const toast = useToast(); // Instancia de notificaciones
+// Inicializamos el toast para notificaciones
+const toast = useToast();
+
+// Inicializamos el router para redirecciones
+const router = useRouter();
 
 // Función para eliminar producto
 const eliminarProducto = async () => {
@@ -22,12 +33,13 @@ const eliminarProducto = async () => {
   }
 
   try {
-    // Llamada a la API
+    // Llamada a la API para eliminar el producto
     const response = await axios.post('http://localhost:5000/api/auth/bajaproducto', {
       formaEliminacion: formaEliminacion.value,
       datoSeleccionado: datoSeleccionado.value,
     });
 
+    // Verifica la respuesta del servidor
     if (response.data.success) {
       toast.success('Producto eliminado exitosamente.', {
         position: 'top-right',
@@ -35,7 +47,13 @@ const eliminarProducto = async () => {
         dismissible: true,
       });
 
-      // Limpiar los campos
+      // Verifica que la redirección se ejecute correctamente
+      console.log("Redirigiendo al panel..."); // Verificar si llega aquí
+      setTimeout(() => {
+        router.push('/panel'); // Redirigir al panel
+      }, 750); // Tiempo de redirección al panel
+
+      // Limpiar los campos del formulario
       formaEliminacion.value = '';
       datoSeleccionado.value = '';
     } else {
@@ -54,7 +72,28 @@ const eliminarProducto = async () => {
     });
   }
 };
+
+// Variable para almacenar los productos
+const productos = ref([]);  // Almacenará los productos obtenidos de la API
+
+// Obtener los productos cuando el componente se monta
+onMounted(async () => {
+  try {
+    // Llamamos a la función obtenerProductos que hace la solicitud
+    productos.value = await obtenerProductos();
+    console.log('Productos obtenidos:', productos.value);  // Para verificar los datos en la consola
+  } catch (err) {
+    console.error('Error al obtener los productos:', err);
+    toast.error('No se pudieron cargar los productos. Intenta más tarde.', {
+      position: 'top-right',
+      duration: 5000,
+      dismissible: true,
+    });
+  }
+});
 </script>
+
+
 
 <template>
   <div class="sys-baja-producto">
@@ -87,12 +126,68 @@ const eliminarProducto = async () => {
       <button class="boton-eliminar-producto" @click="eliminarProducto">
         Eliminar
       </button>
+
+      <table border="1" class="usuarios-table">
+        <thead>
+          <tr>
+            <th>CODIGO DE BARRAS</th>
+            <th>CATEGORIA</th>
+            <th>NOMBRE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="producto in productos" :key="producto.id">
+            <td>{{ producto.codigo_barras }}</td>
+            <td>{{ producto.categoria }}</td>
+            <td>{{ producto.nombre }}</td>
+          </tr>
+        </tbody>
+      </table>
+      
     </div>
   </div>
 </template>
 
 
 <style scoped>
+
+.usuarios-table {
+  width: 100%;
+  margin-top: 4rem;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+.usuarios-table td, .usuarios-table th {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.usuarios-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.usuarios-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.usuarios-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Estilo para las celdas de la tabla */
+.usuarios-table td {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Ajuste de tamaño de las celdas */
+.usuarios-table td, .usuarios-table th {
+  word-wrap: break-word;
+  max-width: 200px;
+}
 /* Contenedor principal del panel, para que ocupe toda la pantalla */
 .sys-baja-producto {
   position: fixed;

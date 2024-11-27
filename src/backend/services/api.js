@@ -151,3 +151,18 @@ export const obtenerUsuarios = async () => {
     throw new Error('Error al obtener los usuarios.');
   }
 };
+
+
+// Función para obtener productos
+export const obtenerProductos = async () => {
+  try {
+    // Realizamos una solicitud GET a la ruta completa en el backend
+    const response = await axios.get('http://localhost:5000/api/auth/obtenerproductos');
+    return response.data;  // Devolvemos los datos de la respuesta (productos)
+  } catch (error) {
+    console.error('Error al obtener los productos:', error);
+    throw new Error('Error al obtener los productos.');
+  }
+};
+
+

@@ -87,24 +87,21 @@ onMounted(async () => {
 <template>
   <div class="delete-user">
     <h2 class="title">Eliminar Usuario</h2>
-    <p class="description">Por favor, ingrese el CURP o el nombre de usuario del usuario que desea eliminar. Esta acción es irreversible.</p>
+    <p class="description">Por favor, ingrese el CURP  del usuario  que desea eliminar. Esta acción es irreversible.</p>
     
     <section class="field">
       <label for="curp">CURP:</label>
       <input type="text" id="curp" v-model="curp" placeholder="Ingrese el CURP" />
     </section>
 
-    <section class="field">
-      <label for="username">Usuario:</label>
-      <input type="text" id="username" v-model="username" placeholder="Ingrese el Usuario" />
-    </section>
+
 
     <div class="warning-icon">
       ⚠️
     </div>
 
      <!-- Botón de registro -->
-     <button class="delete-button" @click="eliminarUsuario">Registrar</button>
+     <button class="delete-button" @click="eliminarUsuario">Borrar usuario</button>
   
      <!-- Mostrar mensajes de éxito y error -->
      <p v-if="errorMessage" style="color: red">{{ errorMessage }}</p>

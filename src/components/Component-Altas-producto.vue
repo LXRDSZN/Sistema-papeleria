@@ -210,6 +210,7 @@ select {
   border-radius: 5px;
   font-size: 1rem;
   margin-bottom: 1rem;
+  color: rgb(0, 0, 0);
 }
 
 .save-button {
@@ -227,5 +228,8 @@ select {
 
 .save-button:hover {
   background-color: #00509e;
+}
+label{
+  color: #353738;
 }
 </style>
