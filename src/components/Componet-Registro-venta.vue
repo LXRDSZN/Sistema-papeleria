@@ -11,8 +11,6 @@ const productosVenta = ref([]); // Productos agregados a la venta
 const codigoBarras = ref('');
 const cantidad = ref(0);
 const totalVenta = ref(0);
-const producto_id = ref('');
-const precio_total = ref(0);
 // Inicializa el toast para notificaciones
 const toast = useToast();
 
@@ -108,10 +106,10 @@ function eliminarSeleccionados() {
   productosVenta.value = productosVenta.value.filter((producto) => !producto.eliminar);
 }
 
-
+// Función para registrar la venta completa
 const registrarVenta = async () => {
-  if (!producto_id.value || !cantidad.value || !precio_total.value) {
-    toast.error('Por favor, completa todos los campos del formulario.', {
+  if (productosVenta.value.length === 0) {
+    toast.error('No hay productos para registrar en la venta.', {
       position: 'top-right',
       duration: 5000,
       dismissible: true,
@@ -120,35 +118,35 @@ const registrarVenta = async () => {
   }
 
   try {
-    // Realizamos la solicitud POST al backend
-    const response = await axios.post('http://localhost:5000/api/auth/ventas', {
-      producto_id: producto_id.value,
-      cantidad: cantidad.value,
-      precio_total: precio_total.value
-    });
-
-    // Manejar la respuesta basándonos en el indicador success
-    if (response.data.success) {
-      toast.success(response.data.message, {
-        position: 'top-right',
-        duration: 2000,
-        dismissible: true,
+    // Recorrer los productos en la venta y enviarlos al backend
+    for (const producto of productosVenta.value) {
+      const response = await axios.post('http://localhost:5000/api/auth/ventas', {
+        producto_id: producto.codigo_barras,
+        cantidad: producto.cantidad,
+        precio_total: producto.precio_venta,
       });
 
-      // Limpiar campos después del registro exitoso
-      producto_id.value = '';
-      cantidad.value = '';
-      precio_total.value = '';
-    } else {
-      // Manejar errores específicos del backend
-      toast.error(response.data.message, {
-        position: 'top-right',
-        duration: 5000,
-        dismissible: true,
-      });
+      // Manejar la respuesta basándonos en el indicador success
+      if (response.data.success) {
+        toast.success(`Venta registrada para el producto: ${producto.nombre}`, {
+          position: 'top-right',
+          duration: 2000,
+          dismissible: true,
+        });
+      } else {
+        toast.error(`Error al registrar el producto: ${producto.nombre}`, {
+          position: 'top-right',
+          duration: 5000,
+          dismissible: true,
+        });
+      }
     }
+
+    // Limpiar la lista de productos en la venta después del registro exitoso
+    productosVenta.value = [];
+    totalVenta.value = 0;
   } catch (error) {
-    console.error('Error al registrar:', error);
+    console.error('Error al registrar la venta:', error);
     toast.error('Hubo un problema con el servidor. Intenta nuevamente.', {
       position: 'top-right',
       duration: 5000,
@@ -156,7 +154,6 @@ const registrarVenta = async () => {
     });
   }
 };
-
 </script>
 <template>
   <div class="sistema-panel-venta">
@@ -220,38 +217,7 @@ const registrarVenta = async () => {
             <td>{{ producto.fecha }}</td>
           </tr>
         </tbody>
-      </table><!-- Campos de información de confirmacion -->
-      <div class="field-container">
-        <div class="field">
-          <label for="producto_id">Código de barras:</label>
-          <input
-            type="text"
-            id="producto_id"
-            v-model="producto_id"
-            placeholder="Ingrese el código de barras"
-          />
-        </div>
-      
-        <div class="field">
-          <label for="cantidad">Cantidad:</label>
-          <input
-            type="text"
-            id="cantidad"
-            v-model="cantidad"
-            placeholder="Ingrese la cantidad de producto"
-          />
-        </div>
-      
-        <div class="field">
-          <label for="precio_total">Precio Total:</label>
-          <input
-            type="text"
-            id="precio_total"
-            v-model="precio_total"
-            placeholder="Ingrese el precio total"
-          />
-        </div>
-      </div>
+      </table>
         <!-- Botón para realizar la venta -->
         <button class="boton-venta" @click="registrarVenta"> Confirmar </button>
       <!-- Total de venta -->
