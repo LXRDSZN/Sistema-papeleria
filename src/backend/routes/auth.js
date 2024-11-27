@@ -197,7 +197,7 @@ router.get('/auth/obtenerproductosfiltro', async (req, res) => {
 
 router.post('/auth/ventas', async (req, res) => {
   // Desestructuramos los datos recibidos del cuerpo de la solicitud
-  const { producto_id, cantidad, precio_total } = req.body;  // No recibimos fecha_venta
+  const { producto_id, cantidad, precio_total } = req.body;
 
   try {
     // Llamamos a la función guardarVenta y pasamos los datos recibidos
@@ -205,18 +205,31 @@ router.post('/auth/ventas', async (req, res) => {
 
     // Verificamos el resultado de la operación
     if (result.success) {
-      // Si el registro fue exitoso, enviamos un mensaje de éxito
-      return res.status(200).json({ message: 'Venta registrada con éxito', data: result.data });
+      // Si el registro fue exitoso, enviamos un mensaje de éxito con success: true
+      return res.status(200).json({
+        success: true,
+        message: 'Venta registrada con éxito',
+        data: result.data
+      });
     } else {
-      // Si hubo un error en el registro, enviamos un mensaje de error
-      return res.status(400).json({ message: result.message, error: result.error });
+      // Si hubo un error en el registro, enviamos un mensaje de error con success: false
+      return res.status(400).json({
+        success: false,
+        message: result.message,
+        error: result.error
+      });
     }
   } catch (error) {
-    // Si ocurre un error inesperado, enviamos un error del servidor
+    // Si ocurre un error inesperado, enviamos un error del servidor con success: false
     console.error('Error al registrar la venta:', error);
-    return res.status(500).json({ message: 'Error del servidor', error });
+    return res.status(500).json({
+      success: false,
+      message: 'Error del servidor',
+      error: error.message
+    });
   }
 });
+
 
 
 export default router;

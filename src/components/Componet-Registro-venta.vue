@@ -109,10 +109,8 @@ function eliminarSeleccionados() {
 }
 
 
-// Función para registrar un usuario
 const registrarVenta = async () => {
-  // Validamos si los campos están vacíos
-  if (!producto_id.value||!cantidad.value||!precio_total.value) {
+  if (!producto_id.value || !cantidad.value || !precio_total.value) {
     toast.error('Por favor, completa todos los campos del formulario.', {
       position: 'top-right',
       duration: 5000,
@@ -127,23 +125,23 @@ const registrarVenta = async () => {
       producto_id: producto_id.value,
       cantidad: cantidad.value,
       precio_total: precio_total.value
- 
     });
 
-    // Verifica la respuesta del servidor
-    if (response.data.message === 'Usuario registrado exitosamente') {
-      toast.success('Usuario registrado exitosamente. Redirigiendo...', {
+    // Manejar la respuesta basándonos en el indicador success
+    if (response.data.success) {
+      toast.success(response.data.message, {
         position: 'top-right',
-        duration: 2000, // Duración de la animación de éxito
+        duration: 2000,
         dismissible: true,
       });
 
-      // Redirigir con un pequeño retraso para mostrar el mensaje
-      setTimeout(() => {
-        router.push('/panel'); // Redirigir al panel de control
-      }, 750);
+      // Limpiar campos después del registro exitoso
+      producto_id.value = '';
+      cantidad.value = '';
+      precio_total.value = '';
     } else {
-      toast.error('Error en el registro. Intente nuevamente.', {
+      // Manejar errores específicos del backend
+      toast.error(response.data.message, {
         position: 'top-right',
         duration: 5000,
         dismissible: true,
@@ -158,6 +156,7 @@ const registrarVenta = async () => {
     });
   }
 };
+
 </script>
 <template>
   <div class="sistema-panel-venta">
