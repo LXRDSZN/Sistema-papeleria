@@ -243,7 +243,7 @@ const registrarVenta = async () => {
         </tbody>
       </table>
         <!-- Botón para realizar la venta -->
-        <button class="boton-venta" @click="registrarVenta"> Confirmar </button>
+        
       <!-- Total de venta -->
       <div class="formulario-datos-usuario">
         <div class="formulario-datos">
@@ -253,9 +253,7 @@ const registrarVenta = async () => {
       </div>
       
       <!-- Botón para realizar la venta -->
-      <button class="boton-venta" @click="registrarVenta" :disabled="productosVenta.length === 0">
-        Realizar Venta
-      </button>
+      <button class="boton-venta" @click="registrarVenta"> Realizar venta </button>
     </div>
   </div>
 </template>
