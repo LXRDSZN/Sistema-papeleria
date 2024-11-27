@@ -2,18 +2,6 @@
 import StatisticBox from './complements/StatisticBox.vue';
 
 
-// Datos de ejemplo (en el futuro se obtendrán del backend)
-const bestSellingProducts = [
-    { title: 'Cuaderno A4', sold: 20, stock: 100 },
-    { title: 'Bolígrafo Azul', sold: 15, stock: 200 },
-    { title: 'Carpeta Plástica', sold: 10, stock: 50 }
-];
-
-const recentSales = [
-    { id: 1, product: 'Cuaderno A4', date: '2024-11-05', total: '$50.00' },
-    { id: 2, product: 'Marcador Permanente', date: '2024-11-04', total: '$20.00' },
-    { id: 3, product: 'Libreta Escolar', date: '2024-11-03', total: '$15.00' }
-];
 
 
 </script>
@@ -88,6 +76,7 @@ const recentSales = [
 
 .statistics > * {
   min-width: 150px;
+  min-height: 100px;
 }
 
 /* Media query para pantallas pequeñas */
